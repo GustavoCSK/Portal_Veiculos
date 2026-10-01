@@ -1,68 +1,30 @@
-const mongoose = require("mongoose")
-const { connectDBAdmin } = require("./src/config/db")
+const { connectDBAdmin } = require("./src/config/db");
+const { Vehicle } = require("./src/models/vehicleModel");
 
 async function main() {
-    await connectDBAdmin()
+    let connection;
+
     try {
-        await createCollections()
+        connection = await connectDBAdmin();
+        const db = connection.db;
+        const collectionExists = await db
+            .listCollections({ name: Vehicle.collection.name }, { nameOnly: true })
+            .hasNext();
+
+        if (!collectionExists) {
+            await Vehicle.createCollection();
+            console.log("Collection 'veiculos' created successfully.");
+        } else {
+            console.log("Collection 'veiculos' already exists.");
+        }
     } catch (err) {
-        console.error("Error in create collections:", err);
-    }
-    finally {
-        await mongoose.connection.close()
+        console.error("Database setup failed:", err.message);
+        process.exitCode = 1;
+    } finally {
+        if (connection) {
+            await connection.close();
+        }
     }
 }
 
-async function createCollections() {
-    try {
-        const db = mongoose.connection.db;
-
-        const veiculosSchema = new mongoose.Schema(
-            {
-                nome: String,
-                marca: String,
-                ano: Number,
-                descricao: String,
-                preco: Number,
-                categoria: String,
-                imagem: String
-            });
-        
-        veiculosSchema.methods.setDetails = function(details) {
-            this.nome = details.nome;
-            this.marca = details.marca;
-            this.ano = details.ano;
-            this.descricao = details.descricao;
-            this.preco = details.preco;
-            this.categoria = details.categoria;
-            this.imagem = details.imagem;
-        }
-
-        veiculosSchema.methods.getDetails = function() {
-            return {
-                nome: this.nome,
-                marca: this.marca,
-                ano: this.ano,
-                descricao: this.descricao,
-                preco: this.preco,
-                categoria: this.categoria,
-                imagem: this.imagem
-            };
-        }
-
-        const veiculos = mongoose.model("veiculos", veiculosSchema);
-
-        await db.createCollection("veiculos", function(err, collection) {
-            if (err) {
-                console.error("Error creating collection:", err);
-            } else {
-                console.log("Collection 'veiculos' created successfully.");
-            }
-        });
-    }
-    catch (err) {
-        console.error("Error creating collections:", err);
-    }
-}
-
-main()
+main();
