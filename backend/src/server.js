@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const markerRoutes = require('./routes/markerRoutes');
+const vehicleRoutes = require('./routes/vehicleRoutes');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -9,7 +9,7 @@ const frontendPath = path.join(__dirname, '../../frontend');
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', markerRoutes);
+app.use('/api', vehicleRoutes);
 app.use(express.static(frontendPath));
 
 app.get('/', (req, res) => {
