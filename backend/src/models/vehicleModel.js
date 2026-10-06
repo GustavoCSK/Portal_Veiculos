@@ -14,4 +14,14 @@ async function getAllVehicles() {
     return Vehicle.find({});
 }
 
-module.exports = { Vehicle, createVehicle, getAllVehicles };
+async function getVehicleById(id) {
+    await connectDBUser();
+    return Vehicle.findById(id);
+}
+
+async function getVehicleByCat(categoria) {
+    await connectDBUser();
+    return Vehicle.find({ categoria });
+}
+
+module.exports = { Vehicle, createVehicle, getAllVehicles, getVehicleById, getVehicleByCat };

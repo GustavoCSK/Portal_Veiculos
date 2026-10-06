@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 const API_URL = 'http://localhost:3000/api/vehicles'
 
 async function fetchVehicles(setVehicles) {
@@ -12,21 +13,41 @@ async function fetchVehicles(setVehicles) {
     }
 }
 
+async function fetchVehiclesByCat(categoria, setVehicles) {
+    try {
+        const response = await axios.get(`${API_URL}/categoria/${categoria}`)
+        setVehicles(response.data)
+    } catch (error) {
+        console.error('Erro ao buscar veículos por categoria:', error)
+    }
+}
 function Cards({ onSelectVehicle }) {
     const [vehicles, setVehicles] = useState([])
+    const [category, setCategory] = useState('')
 
     useEffect(() => {
-        fetchVehicles(setVehicles)
-    }, [])
+        if (category) {
+            fetchVehiclesByCat(category, setVehicles)
+        } else {
+            fetchVehicles(setVehicles)
+        }
+    }, [category])
+
     return (
         <>
+        <div className="categoryFilter" role="group" aria-label="Filtrar veículos por categoria">
+            <button type="button" aria-pressed={category === ''} onClick={() => setCategory('')}>Todos</button>
+            <button type="button" aria-pressed={category === 'hatch'} onClick={() => setCategory(category === 'hatch' ? '' : 'hatch')}>Hatch</button>
+            <button type="button" aria-pressed={category === 'suv'} onClick={() => setCategory(category === 'suv' ? '' : 'suv')}>SUV</button>
+            <button type="button" aria-pressed={category === 'pickup'} onClick={() => setCategory(category === 'pickup' ? '' : 'pickup')}>Pickup</button>
+            <button type="button" aria-pressed={category === 'sedan'} onClick={() => setCategory(category === 'sedan' ? '' : 'sedan')}>Sedan</button>
+        </div>
         {
-            vehicles.map(vehicle => (
-                <button
+            vehicles.length > 0 ? vehicles.map(vehicle => (
+                <Link
                     key={vehicle._id}
-                    type="button"
                     className="vehicleCard"
-                    onClick={() => onSelectVehicle(vehicle)}
+                    to={`/detalhes/${vehicle._id}`}
                     aria-label={`Ver detalhes de ${vehicle.nome}`}
                 >
                     <img className="vehicleImage" src={vehicle.imagem} alt={vehicle.nome} />
@@ -35,8 +56,19 @@ function Cards({ onSelectVehicle }) {
                         <p className="vehicleDescription">{vehicle.descricao}</p>
                         <p className="vehiclePrice">Preço <strong>R$ {vehicle.preco.toFixed(2)}</strong></p>
                     </div>
-                </button>
-            ))
+                </Link>
+            )) : (
+                <p className="emptyVehicles" role="status">
+                    {category
+                        ? `Nenhum veículo encontrado na categoria ${category}.`
+                        : 'Nenhum veículo cadastrado.'}
+                    {category && (
+                        <button type="button" onClick={() => setCategory('')}>
+                            Ver todos
+                        </button>
+                    )}
+                </p>
+            )
         }
         </>
     )

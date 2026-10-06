@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Cards from '../components/Cards'
 
-function Home({ onSelectVehicle }) {
+function Home() {
     return (
         <div className="homePage">
             <Header />
@@ -31,7 +31,7 @@ function Home({ onSelectVehicle }) {
                         <p>Boas escolhas para seguir em frente.</p>
                     </div>
                     <div className="vehicleGrid">
-                        <Cards onSelectVehicle={onSelectVehicle} />
+                        <Cards />
                     </div>
                 </section>
             </main>
