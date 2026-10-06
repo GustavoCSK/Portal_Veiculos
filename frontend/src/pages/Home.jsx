@@ -1,20 +1,40 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Cards from '../components/Cards'
 
 function Home() {
     return (
-        <div>
+        <div className="homePage">
             <Header />
-            <div className="home">
-                <div className="hero">
-                    <div className="heroDesc">
-                        <p>Com mais de 25 anos de historia no ramo, a Portal Veiculos foi a segunda loja de automoveis da cidade</p>
-                        <p>Nossa equipe sempre pronta para te atender e fazer a melhor poposta para sua satisfacao</p>
-                        <p>Compra, Vende, Financia</p>
+            <main>
+                <section className="hero" aria-labelledby="hero-title">
+                    <div className="heroContent">
+                        <p className="eyebrow">Há mais de 25 anos em Canoinhas</p>
+                        <h1 id="hero-title">Seu próximo carro está mais perto.</h1>
+                        <p className="heroDescription">Uma história feita de confiança, bons negócios e caminhos novos. Encontre aqui o veículo certo para você.</p>
+                        <a className="heroAction" href="#estoque">
+                            Ver veículos <span aria-hidden="true">↘</span>
+                        </a>
                     </div>
-                </div>
-            </div>
+                    <div className="heroStamp">
+                        <strong>Compra · Venda · Financiamento</strong>
+                        <span>Atendimento próximo, negócio transparente.</span>
+                    </div>
+                </section>
+                <section className="inventory" id="estoque" aria-labelledby="inventory-title">
+                    <div className="sectionHeading">
+                        <div>
+                            <p className="eyebrow">Seleção Portal</p>
+                            <h2 id="inventory-title">Veículos em destaque</h2>
+                        </div>
+                        <p>Boas escolhas para seguir em frente.</p>
+                    </div>
+                    <div className="vehicleGrid">
+                        <Cards />
+                    </div>
+                </section>
+            </main>
             <Footer />
         </div>
     )
