@@ -8,7 +8,8 @@ const vehicleSchema = new mongoose.Schema(
 		descricao: String,
 		preco: Number,
 		categoria: String,
-		imagem: String,
+		imagemId: { type: mongoose.Schema.Types.ObjectId, default: null },
+		imagemNome: String,
 	},
 	{ collection: 'veiculos' },
 );

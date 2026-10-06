@@ -1,5 +1,6 @@
-const { connectDBAdmin } = require("./src/config/db");
-const { Vehicle } = require("./src/models/vehicleModel");
+const mongoose = require('mongoose');
+const { connectDBAdmin } = require('./src/config/db');
+const { Vehicle } = require('./src/models/vehicleModel');
 
 async function main() {
     let connection;
@@ -13,12 +14,13 @@ async function main() {
 
         if (!collectionExists) {
             await Vehicle.createCollection();
+            new mongoose.mongo.GridFSBucket(db, { bucketName: 'vehicleImages' });
             console.log("Collection 'veiculos' created successfully.");
         } else {
             console.log("Collection 'veiculos' already exists.");
         }
     } catch (err) {
-        console.error("Database setup failed:", err.message);
+        console.error('Database setup failed:', err.message);
         process.exitCode = 1;
     } finally {
         if (connection) {
