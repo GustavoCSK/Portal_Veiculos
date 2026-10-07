@@ -66,8 +66,8 @@ exports.getVehicleImage = async (req, res) => {
             return res.status(404).json({ message: 'Vehicle image not found' });
         }
 
-        const fileInfo = await mongoose.connection.db.collection('fs.files').findOne({ _id: new mongoose.Types.ObjectId(vehicle.imagemId) });
-        res.setHeader('Content-Type', fileInfo?.contentType || 'application/octet-stream');
+        const fileInfo = await mongoose.connection.db.collection('vehicleImages.files').findOne({ _id: new mongoose.Types.ObjectId(vehicle.imagemId) });
+        res.setHeader('Content-Type', fileInfo?.metadata?.contentType || fileInfo?.contentType || 'application/octet-stream');
 
         imageStream.pipe(res);
     } catch (error) {
