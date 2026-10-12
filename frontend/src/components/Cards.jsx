@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import formatCurrency from '../utils/formatCurrency'
 const API_URL = 'http://localhost:3000/api/vehicles'
 
 async function fetchVehicles(setVehicles, setCategories) {
@@ -34,7 +35,7 @@ function getCategories(vehicles) {
 }
 
 
-function Cards({ onSelectVehicle }) {
+function Cards() {
     const [vehicles, setVehicles] = useState([])
     const [categories, setCategories] = useState([])
     const [category, setCategory] = useState('')
@@ -61,12 +62,6 @@ function Cards({ onSelectVehicle }) {
                         {cat}
                     </button>
                 ))}
-
-                {/* 
-            <button type="button" aria-pressed={category === 'hatch'} onClick={() => setCategory(category === 'hatch' ? '' : 'hatch')}>Hatch</button>
-            <button type="button" aria-pressed={category === 'suv'} onClick={() => setCategory(category === 'suv' ? '' : 'suv')}>SUV</button>
-            <button type="button" aria-pressed={category === 'pickup'} onClick={() => setCategory(category === 'pickup' ? '' : 'pickup')}>Pickup</button>
-            <button type="button" aria-pressed={category === 'sedan'} onClick={() => setCategory(category === 'sedan' ? '' : 'sedan')}>Sedan</button> */}
             </div>
             {
                 vehicles.length > 0 ? vehicles.map(vehicle => (
@@ -80,7 +75,7 @@ function Cards({ onSelectVehicle }) {
                         <div className="vehicleDetails">
                             <h3>{vehicle.nome}</h3>
                             <p className="vehicleDescription">{vehicle.descricao}</p>
-                            <p className="vehiclePrice">Preço <strong>R$ {vehicle.preco.toFixed(2)}</strong></p>
+                            <p className="vehiclePrice">Preço <strong>{formatCurrency(vehicle.preco)}</strong></p>
                         </div>
                     </Link>
                 )) : (

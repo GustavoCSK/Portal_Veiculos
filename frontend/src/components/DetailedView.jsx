@@ -3,10 +3,11 @@ import axios from 'axios'
 import { Link, useParams } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
+import formatCurrency from '../utils/formatCurrency'
 
 const API_URL = 'http://localhost:3000/api/vehicles'
 
-function DetailedView() {
+function DetailedView({ theme, onToggleTheme }) {
     const { id } = useParams()
     const [vehicle, setVehicle] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -38,7 +39,7 @@ function DetailedView() {
 
     return (
         <div className="homePage">
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
             <main className="detailPage">
                 <div className="detailContent">
                     <Link className="detailBack" to="/">
@@ -54,7 +55,7 @@ function DetailedView() {
                                 <h1 id="detail-title">{vehicle.nome}</h1>
                                 <p className="detailDescription">{vehicle.descricao}</p>
                                 <p className="detailPriceLabel">Preço</p>
-                                <p className="detailPrice">R$ {vehicle.preco.toFixed(2)}</p>
+                                <p className="detailPrice">{formatCurrency(vehicle.preco)}</p>
                                 <a className="detailContact" href="tel:+5547999864050">Falar com a equipe <span aria-hidden="true">↗</span></a>
                             </div>
                         </section>
