@@ -1,21 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Lobster&display=swap');
 
 :root {
-	font-family: 'DM Sans', sans-serif;
-	color: #202421;
-	background: #f3f2ed;
+	font-family: 'Lato', sans-serif;
+	color: #263d4b;
+	background: #f4f7f9;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	--ink: #202421;
-	--muted: #747971;
-	--paper: #f3f2ed;
-	--white: #fffefa;
-	--lime: #c8ec61;
-	--line: #dedfd7;
-	--rust: #b76543;
+	--ink: #1d3d52;
+	--muted: #637784;
+	--paper: #f4f7f9;
+	--white: #ffffff;
+	--surface: #ffffff;
+	--brand-blue: #087fb5;
+	--brand-blue-hover: #066590;
+	--brand-blue-light: #75c2ed;
+	--brand-coral: #b74345;
+	--line: #d9e2e8;
+	--dark-muted: #bfccd3;
+	--header-bg: #ffffff;
+	--footer-bg: #1d3d52;
+	--footer-ink: #ffffff;
+	--subtle-bg: #e7edf1;
+	--hero-bg: #1d3d52;
 }
 
 * {
@@ -32,6 +41,32 @@ body {
 	margin: 0;
 }
 
+.appShell {
+	min-height: 100vh;
+	color: var(--ink);
+	background: var(--paper);
+	transition: color .2s ease, background-color .2s ease;
+}
+
+.appShell[data-theme="dark"] {
+	--ink: #edf4f7;
+	--muted: #bac8d0;
+	--paper: #151f26;
+	--surface: #24343f;
+	--brand-blue: #20a5e0;
+	--brand-blue-hover: #1685ba;
+	--brand-blue-light: #8cd6ff;
+	--brand-coral: #ff817d;
+	--line: #3b4d58;
+	--dark-muted: #bac8d0;
+	--header-bg: #1d2a33;
+	--footer-bg: #10181e;
+	--footer-ink: #edf4f7;
+	--subtle-bg: #2b3b45;
+	--hero-bg: #102b3b;
+	color-scheme: dark;
+}
+
 button,
 a {
 	font: inherit;
@@ -42,6 +77,6 @@ a {
 }
 
 ::selection {
-	color: var(--ink);
-	background: var(--lime);
+	color: var(--white);
+	background: var(--brand-blue);
 }

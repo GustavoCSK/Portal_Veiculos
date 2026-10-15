@@ -38,7 +38,7 @@ async function storeVehicleImage(file) {
 
     return new Promise((resolve, reject) => {
         const uploadStream = bucket.openUploadStream(file.originalname, {
-            contentType: file.mimetype || 'application/octet-stream',
+            metadata: { contentType: file.mimetype || 'application/octet-stream' },
         });
 
         uploadStream.on('error', reject);

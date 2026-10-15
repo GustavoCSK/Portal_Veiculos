@@ -1,9 +1,9 @@
 function Footer() {
     return (
-        <footer className="footer">
+        <footer className="footer" id="sobre">
             <div className="footerInner">
                 <div className="footerBrand">
-                    <strong>PORTAL <span>VEÍCULOS</span></strong>
+                    <strong>Portal <span>Veículos</span></strong>
                     <p>Negócios seguros. Novos caminhos.</p>
                 </div>
                 <div className="footerColumn">

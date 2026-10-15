@@ -5,17 +5,67 @@
 .header {
 	position: relative;
 	z-index: 1;
-	color: var(--white);
-	background: var(--ink);
+	color: var(--ink);
+	background: var(--header-bg);
+	border-bottom: 1px solid var(--line);
 }
 
 .headerInner {
 	width: min(1200px, calc(100% - 64px));
-	min-height: 88px;
+	min-height: 68px;
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+}
+
+.headerActions {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+
+.headerNav {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+
+.headerNav a {
+	color: var(--ink);
+	font-size: 13px;
+	text-decoration: none;
+	transition: color .18s ease;
+}
+
+.headerNav a:hover {
+	color: var(--brand-blue);
+}
+
+.themeToggle {
+	width: 40px;
+	height: 40px;
+	display: grid;
+	place-items: center;
+	border: 1px solid var(--line);
+	border-radius: 50%;
+	color: var(--brand-blue);
+	background: var(--surface);
+	font-size: 22px;
+	line-height: 1;
+	cursor: pointer;
+	transition: color .18s ease, background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.themeToggle:hover {
+	border-color: var(--brand-blue);
+	background: var(--subtle-bg);
+	transform: rotate(-8deg);
+}
+
+.themeToggle:focus-visible {
+	outline: 3px solid var(--brand-coral);
+	outline-offset: 3px;
 }
 
 .brand {
@@ -30,11 +80,12 @@
 	height: 42px;
 	display: grid;
 	place-items: center;
-	color: var(--ink);
-	background: var(--lime);
-	font-family: 'Manrope', sans-serif;
-	font-size: 14px;
-	font-weight: 800;
+	border: 2px solid var(--brand-blue);
+	border-radius: 50%;
+	color: var(--brand-blue);
+	background: var(--surface);
+	font-family: 'Lobster', cursive;
+	font-size: 15px;
 }
 
 .brandWords {
@@ -43,35 +94,32 @@
 }
 
 .brandWords strong {
-	font-family: 'Manrope', sans-serif;
-	font-size: 17px;
+	display: flex;
+	gap: 6px;
+	font-family: 'Lobster', cursive;
+	font-size: 22px;
 	line-height: 1;
 }
 
+.brandWords strong span:first-child {
+	color: var(--brand-blue);
+}
+
+.brandWords strong span:last-child {
+	color: var(--brand-coral);
+}
+
 .brandWords small {
-	color: #b8beb8;
+	color: var(--muted);
 	font-size: 9px;
 	font-weight: 700;
+	letter-spacing: .09em;
 }
 
-.headerContact {
-	display: grid;
-	gap: 3px;
-	text-align: right;
-}
-
-.headerContact span,
 .footerLabel {
-	color: #aab0a9;
+	color: var(--muted);
 	font-size: 11px;
 	font-weight: 600;
-}
-
-.headerContact a {
-	color: var(--white);
-	font-size: 14px;
-	font-weight: 700;
-	text-decoration: none;
 }
 
 .hero {
@@ -80,10 +128,10 @@
 	display: flex;
 	align-items: center;
 	color: var(--white);
-	background-color: #303632;
+	background-color: var(--hero-bg);
 	background-image:
-		linear-gradient(90deg, rgba(20, 25, 22, .94) 0%, rgba(20, 25, 22, .82) 39%, rgba(20, 25, 22, .16) 100%),
-		url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=85');
+		linear-gradient(90deg, rgba(17, 49, 69, .94) 0%, rgba(17, 49, 69, .82) 39%, rgba(17, 49, 69, .16) 100%),
+		url('./assets/fachada_pv.jpg');
 	background-position: center, center 58%;
 	background-size: cover;
 }
@@ -97,20 +145,20 @@
 
 .eyebrow {
 	margin: 0 0 16px;
-	color: var(--rust);
+	color: var(--brand-coral);
 	font-size: 11px;
 	font-weight: 700;
 	text-transform: uppercase;
 }
 
 .hero .eyebrow {
-	color: var(--lime);
+	color: var(--brand-blue-light);
 }
 
 .hero h1 {
 	max-width: 620px;
 	margin: 0;
-	font-family: 'Manrope', sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-size: 56px;
 	font-weight: 700;
 	line-height: 1.08;
@@ -119,7 +167,7 @@
 .heroDescription {
 	max-width: 490px;
 	margin: 20px 0 28px;
-	color: #d4d8d2;
+	color: #e1e9ee;
 	font-size: 16px;
 	line-height: 1.7;
 }
@@ -130,8 +178,8 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 28px;
-	color: var(--ink);
-	background: var(--lime);
+	color: var(--white);
+	background: var(--brand-blue);
 	font-size: 13px;
 	font-weight: 700;
 	text-decoration: none;
@@ -139,7 +187,7 @@
 }
 
 .heroAction:hover {
-	background: #d8f487;
+	background: var(--brand-blue-hover);
 	transform: translateY(-2px);
 }
 
@@ -157,17 +205,17 @@
 }
 
 .heroStamp strong {
-	color: var(--lime);
+	color: var(--brand-blue-light);
 	font-size: 12px;
 }
 
 .heroStamp span {
-	color: #d4d8d2;
+	color: #e1e9ee;
 	font-size: 11px;
 }
 
 .inventory {
-	width: min(1200px, calc(100% - 64px));
+	width: min(1160px, calc(100% - 64px));
 	margin: 0 auto;
 	padding: 78px 0 88px;
 }
@@ -186,7 +234,7 @@
 
 .sectionHeading h2 {
 	margin: 0;
-	font-family: 'Manrope', sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-size: 30px;
 	font-weight: 700;
 }
@@ -217,7 +265,7 @@
 	border: 1px solid var(--line);
 	border-radius: 4px;
 	color: var(--ink);
-	background: var(--white);
+	background: var(--surface);
 	font: inherit;
 	font-size: 12px;
 	font-weight: 600;
@@ -225,9 +273,9 @@
 }
 
 .categoryFilter button[aria-pressed="true"] {
-	border-color: var(--ink);
+	border-color: var(--brand-blue);
 	color: var(--white);
-	background: var(--ink);
+	background: var(--brand-blue);
 }
 
 .emptyVehicles {
@@ -252,9 +300,9 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	background: var(--white);
+	background: var(--surface);
 	border: 1px solid var(--line);
-	border-radius: 6px;
+	border-radius: 0;
 	color: inherit;
 	font: inherit;
 	text-align: left;
@@ -264,7 +312,7 @@
 }
 
 .vehicleCard:hover {
-	box-shadow: 0 14px 30px rgba(32, 36, 33, .1);
+	box-shadow: 0 14px 30px rgba(38, 61, 75, .12);
 	transform: translateY(-3px);
 }
 
@@ -273,13 +321,13 @@
 	aspect-ratio: 16 / 10;
 	display: block;
 	object-fit: cover;
-	background: #e2e3dc;
-	color: #70756f;
+	background: var(--subtle-bg);
+	color: var(--muted);
 	font-size: 13px;
 }
 
 .vehicleDetails {
-	padding: 18px;
+	padding: 12px;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -287,7 +335,7 @@
 
 .vehicleDetails h3 {
 	margin: 0;
-	font-family: 'Manrope', sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-size: 18px;
 }
 
@@ -317,14 +365,14 @@
 
 .vehiclePrice strong {
 	color: var(--ink);
-	font-family: 'Manrope', sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-size: 17px;
 }
 
 .footer {
 	padding: 44px max(32px, calc((100% - 1200px) / 2)) 18px;
-	color: var(--white);
-	background: var(--ink);
+	color: var(--footer-ink);
+	background: var(--footer-bg);
 }
 
 .footerInner {
@@ -335,17 +383,17 @@
 }
 
 .footerBrand > strong {
-	font-family: 'Manrope', sans-serif;
-	font-size: 17px;
+	font-family: 'Lobster', cursive;
+	font-size: 21px;
 }
 
 .footerBrand > strong span {
-	color: var(--lime);
+	color: var(--brand-coral);
 }
 
 .footerBrand p {
 	margin: 8px 0 0;
-	color: #aab0a9;
+	color: var(--dark-muted);
 	font-size: 12px;
 }
 
@@ -356,24 +404,24 @@
 }
 
 .footerColumn address {
-	color: #e1e4de;
+	color: #e7edf1;
 	font-style: normal;
 	line-height: 1.6;
 }
 
 .footerColumn a {
-	color: #e1e4de;
+	color: #e7edf1;
 	text-decoration: none;
 }
 
 .footerColumn a:hover,
 .loginLink:hover {
-	color: var(--lime);
+	color: var(--brand-blue-light);
 }
 
 .loginLink {
 	padding: 10px 12px;
-	border: 1px solid #505650;
+	border: 1px solid #657984;
 	color: var(--white);
 	font-size: 12px;
 	text-decoration: none;
@@ -390,8 +438,8 @@
 	display: flex;
 	justify-content: space-between;
 	gap: 14px;
-	border-top: 1px solid #414742;
-	color: #aab0a9;
+	border-top: 1px solid #455965;
+	color: var(--dark-muted);
 	font-size: 10px;
 }
 
@@ -408,7 +456,7 @@
 .vehicleCard:focus-visible,
 .detailBack:focus-visible,
 .detailContact:focus-visible {
-	outline: 3px solid var(--rust);
+	outline: 3px solid var(--brand-coral);
 	outline-offset: 3px;
 }
 
@@ -443,66 +491,98 @@
 }
 
 .detailLayout {
-	overflow: hidden;
-	display: grid;
-	grid-template-columns: 1.15fr .85fr;
-	background: var(--white);
-	border: 1px solid var(--line);
-	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
 }
 
 .detailImage {
-	width: 100%;
-	height: 100%;
-	min-height: 380px;
-	max-height: 560px;
+	width: min(100%, 760px);
+	height: auto;
+	aspect-ratio: 16 / 9;
+	min-height: 0;
 	object-fit: cover;
-	background: #e2e3dc;
+	background: var(--subtle-bg);
+	border: 1px solid var(--line);
 }
 
 .detailCopy {
-	padding: clamp(28px, 5vw, 62px);
-	align-self: center;
+	width: min(100%, 760px);
+	padding: 0;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: start;
+	gap: 12px;
 }
 
 .detailCopy h1 {
+	grid-column: 1 / -1;
 	margin: 0;
-	font-family: 'Manrope', sans-serif;
-	font-size: 34px;
+	font-family: 'Lato', sans-serif;
+	font-size: 30px;
 	line-height: 1.15;
 }
 
+.detailCopy .eyebrow {
+	grid-column: 1 / -1;
+	margin: 0 0 -6px;
+}
+
 .detailDescription {
-	margin: 16px 0 28px;
+	grid-column: 1;
+	grid-row: 3 / span 2;
+	margin: 0;
+	padding: 14px;
+	border: 1px solid var(--line);
 	color: var(--muted);
 	font-size: 14px;
 	line-height: 1.7;
 }
 
 .detailPriceLabel {
-	margin: 0 0 4px;
+	grid-column: 2;
+	grid-row: 3;
+	margin: 0;
+	padding: 14px 14px 0;
+	border: 1px solid var(--line);
+	border-bottom: 0;
 	color: var(--muted);
 	font-size: 12px;
 }
 
 .detailPrice {
-	margin: 0 0 24px;
-	font-family: 'Manrope', sans-serif;
-	font-size: 27px;
+	grid-column: 2;
+	grid-row: 4;
+	margin: 0;
+	padding: 4px 14px 14px;
+	border: 1px solid var(--line);
+	border-top: 0;
+	font-family: 'Lato', sans-serif;
+	font-size: 22px;
 	font-weight: 800;
 }
 
 .detailContact {
+	grid-column: 1 / -1;
+	grid-row: 5;
+	justify-self: start;
 	min-height: 46px;
 	padding: 0 16px;
 	display: inline-flex;
 	align-items: center;
 	gap: 22px;
-	color: var(--ink);
-	background: var(--lime);
+	color: var(--white);
+	background: var(--brand-blue);
 	font-size: 13px;
 	font-weight: 700;
 	text-decoration: none;
+	transition: background-color .18s ease, transform .18s ease;
+}
+
+.detailContact:hover {
+	background: var(--brand-blue-hover);
+	transform: translateY(-2px);
 }
 
 .detailContact span {
@@ -516,22 +596,117 @@
 }
 
 @media (max-width: 700px) {
+	.headerInner,
+	.heroContent,
+	.inventory {
+		width: calc(100% - 40px);
+	}
+
+	.headerInner {
+		min-height: 64px;
+	}
+
+	.headerActions {
+		gap: 12px;
+	}
+
+	.headerNav {
+		gap: 12px;
+	}
+
+	.headerNav a {
+		font-size: 11px;
+	}
+
+	.brand {
+		gap: 8px;
+	}
+
+	.brandMark {
+		width: 36px;
+		height: 36px;
+	}
+
+	.brandWords strong {
+		font-size: 17px;
+	}
+
+	.brandWords small {
+		font-size: 8px;
+	}
+
+	.themeToggle {
+		width: 34px;
+		height: 34px;
+		font-size: 19px;
+	}
+
+	.hero {
+		min-height: 590px;
+		align-items: start;
+		background-image:
+			linear-gradient(90deg, rgba(17, 49, 69, .9), rgba(17, 49, 69, .58)),
+			url('./assets/fachada_pv.jpg');
+		background-position: center, 58% center;
+	}
+
+	.heroContent {
+		padding-top: 82px;
+	}
+
+	.hero h1 {
+		max-width: 460px;
+		font-size: 42px;
+	}
+
+	.heroDescription {
+		max-width: 410px;
+		font-size: 14px;
+	}
+
+	.inventory {
+		padding: 56px 0 62px;
+	}
+
+	.heroStamp {
+		right: 20px;
+		bottom: 22px;
+		left: 20px;
+		text-align: left;
+	}
+
+	.sectionHeading {
+		align-items: start;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.sectionHeading h2 {
+		font-size: 25px;
+	}
+
 	.detailContent {
 		width: calc(100% - 40px);
 		padding: 24px 0 48px;
 	}
 
-	.detailLayout {
-		grid-template-columns: 1fr;
-	}
-
 	.detailImage {
-		min-height: 0;
 		aspect-ratio: 4 / 3;
 	}
 
 	.detailCopy {
-		padding: 26px 22px 30px;
+		grid-template-columns: 1fr;
+	}
+
+	.detailDescription,
+	.detailPriceLabel,
+	.detailPrice {
+		grid-column: 1;
+		grid-row: auto;
+	}
+
+	.detailContact {
+		grid-row: auto;
 	}
 
 	.detailCopy h1 {
@@ -551,60 +726,6 @@
 }
 
 @media (max-width: 700px) {
-	.headerInner,
-	.heroContent,
-	.inventory {
-		width: calc(100% - 40px);
-	}
-
-	.headerInner {
-		min-height: 76px;
-	}
-
-	.hero {
-		min-height: 590px;
-		align-items: start;
-		background-image:
-			linear-gradient(90deg, rgba(20, 25, 22, .88), rgba(20, 25, 22, .55)),
-			url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1100&q=80');
-		background-position: center, 58% center;
-	}
-
-	.heroContent {
-		padding-top: 82px;
-	}
-
-	.hero h1 {
-		max-width: 460px;
-		font-size: 42px;
-	}
-
-	.heroDescription {
-		max-width: 410px;
-		font-size: 14px;
-	}
-
-	.heroStamp {
-		right: 20px;
-		bottom: 22px;
-		left: 20px;
-		text-align: left;
-	}
-
-	.inventory {
-		padding: 56px 0 62px;
-	}
-
-	.sectionHeading {
-		align-items: start;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.sectionHeading h2 {
-		font-size: 25px;
-	}
-
 	.vehicleGrid {
 		grid-template-columns: 1fr;
 		gap: 14px;
@@ -629,12 +750,16 @@
 }
 
 @media (max-width: 390px) {
-	.headerContact span {
-		display: none;
+	.headerActions {
+		gap: 8px;
 	}
 
-	.headerContact a {
-		font-size: 12px;
+	.headerNav {
+		gap: 8px;
+	}
+
+	.headerNav a {
+		font-size: 10px;
 	}
 
 	.brandWords strong {

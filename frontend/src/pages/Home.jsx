@@ -3,10 +3,10 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Cards from '../components/Cards'
 
-function Home() {
+function Home({ theme, onToggleTheme }) {
     return (
         <div className="homePage">
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
             <main>
                 <section className="hero" aria-labelledby="hero-title">
                     <div className="heroContent">
