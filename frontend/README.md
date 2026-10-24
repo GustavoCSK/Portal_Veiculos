@@ -1,16 +1,22 @@
-# React + Vite
+# Portal Veículos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Static React site for the Portal Veículos MVP. It runs without the API or MongoDB; the sample inventory is bundled with the frontend in `src/data/vehicles.js`.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm ci --prefix frontend
+npm run dev --prefix frontend
+```
 
-## React Compiler
+Update the vehicle details and image URLs in `src/data/vehicles.js` to customize the presentation. Vehicle detail pages use hash routes so they work on GitHub Pages without server rewrites.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Deploy to GitHub Pages
 
-## Expanding the ESLint configuration
+The workflow in `.github/workflows/deploy.yml` builds and deploys the site when changes are pushed to `old-ver-ui`. In the repository settings, set **Pages > Build and deployment > Source** to **GitHub Actions**. The built site will be available at `https://gustavocsk.github.io/Portal_Veiculos/`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Build locally:
+
+```sh
+npm run build --prefix frontend
+```

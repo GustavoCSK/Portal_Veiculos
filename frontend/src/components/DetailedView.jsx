@@ -1,41 +1,12 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Link, useParams } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import formatCurrency from '../utils/formatCurrency'
-
-const API_URL = 'http://localhost:3000/api/vehicles'
+import vehicles from '../data/vehicles'
 
 function DetailedView({ theme, onToggleTheme }) {
     const { id } = useParams()
-    const [vehicle, setVehicle] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
-
-    useEffect(() => {
-        let cancelled = false
-
-        setVehicle(null)
-        setError(false)
-        setLoading(true)
-
-        axios.get(`${API_URL}/${id}`)
-            .then((response) => {
-                if (!cancelled) setVehicle(response.data)
-            })
-            .catch((requestError) => {
-                console.error('Erro ao buscar veículo:', requestError)
-                if (!cancelled) setError(true)
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false)
-            })
-
-        return () => {
-            cancelled = true
-        }
-    }, [id])
+    const vehicle = vehicles.find(item => item._id === id)
 
     return (
         <div className="homePage">
@@ -45,8 +16,7 @@ function DetailedView({ theme, onToggleTheme }) {
                     <Link className="detailBack" to="/">
                         <span aria-hidden="true">←</span> Voltar ao estoque
                     </Link>
-                    {loading && <p role="status">Carregando veículo...</p>}
-                    {error && <p role="alert">Não foi possível encontrar este veículo.</p>}
+                    {!vehicle && <p role="alert">Não foi possível encontrar este veículo.</p>}
                     {vehicle && (
                         <section className="detailLayout" aria-labelledby="detail-title">
                             <img className="detailImage" src={vehicle.imagem} alt={vehicle.nome} />
@@ -56,7 +26,7 @@ function DetailedView({ theme, onToggleTheme }) {
                                 <p className="detailDescription">{vehicle.descricao}</p>
                                 <p className="detailPriceLabel">Preço</p>
                                 <p className="detailPrice">{formatCurrency(vehicle.preco)}</p>
-                                <a className="detailContact" href="tel:+5547999864050">Falar com a equipe <span aria-hidden="true">↗</span></a>
+                                <a className="detailContact" href="https://wa.me/5547992054050" target="_blank" rel="noreferrer">Falar com a equipe <span aria-hidden="true">↗</span></a>
                             </div>
                         </section>
                     )}

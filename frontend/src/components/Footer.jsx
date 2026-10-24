@@ -12,7 +12,7 @@ function Footer() {
                 </div>
                 <div className="footerColumn">
                     <span className="footerLabel">Fale com a gente</span>
-                    <a href="tel:+5547999864050">(47) 99986-4050</a>
+                    <a href="https://wa.me/5547992054050" target="_blank" rel="noreferrer">WhatsApp · (47) 99205-4050</a>
                     <a href="tel:+554736241112">(47) 3624-1112</a>
                 </div>
                 <a className="loginLink" href="/login">Acesso lojista <span aria-hidden="true">↗</span></a>

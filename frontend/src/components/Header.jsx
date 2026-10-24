@@ -1,18 +1,20 @@
+import { Link } from 'react-router-dom'
+
 function Header({ theme, onToggleTheme }) {
     return (
         <header className="header">
             <div className="headerInner">
-                <a className="brand" href="/" aria-label="Portal Veículos, início">
+                <Link className="brand" to="/" aria-label="Portal Veículos, início">
                     <span className="brandMark" aria-hidden="true">PV</span>
                     <span className="brandWords">
                         <strong><span>Portal</span><span>Veículos</span></strong>
                         <small>CANOINHAS</small>
                     </span>
-                </a>
+                </Link>
                 <div className="headerActions">
                     <nav className="headerNav" aria-label="Navegação principal">
-                        <a href="/">Home</a>
-                        <a href="/#sobre">About us</a>
+                        <Link to="/">Início</Link>
+                        <Link to="/#estoque">Estoque</Link>
                     </nav>
                     <button
                         className="themeToggle"

@@ -2,11 +2,10 @@
   "name": "portal-veiculos",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev -- --host 0.0.0.0\"",
-    "backend": "npm --prefix backend run dev",
+    "dev": "npm --prefix frontend run dev -- --host 0.0.0.0",
     "frontend": "npm --prefix frontend run dev -- --host 0.0.0.0",
     "build": "npm --prefix frontend run build",
-    "start": "npm --prefix backend run start"
+    "preview": "npm --prefix frontend run preview -- --host 0.0.0.0"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"
