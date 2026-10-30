@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 :root {
-	font-family: 'Lato', sans-serif;
-	color: #263d4b;
-	background: #f4f7f9;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	color: #1d3d52;
+	background: #f5f1e8;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
@@ -11,20 +11,24 @@
 
 	--ink: #1d3d52;
 	--muted: #637784;
-	--paper: #f4f7f9;
+	--paper: #f5f1e8;
 	--white: #ffffff;
-	--surface: #ffffff;
+	--surface: #fffdf8;
+	--surface-cool: #e8f0f1;
+	--accent-amber: #c78b2d;
+	--accent-sage: #5d796d;
 	--brand-blue: #087fb5;
 	--brand-blue-hover: #066590;
 	--brand-blue-light: #75c2ed;
 	--brand-coral: #b74345;
-	--line: #d9e2e8;
+	--line: #dedbd1;
 	--dark-muted: #bfccd3;
 	--header-bg: #ffffff;
 	--footer-bg: #1d3d52;
 	--footer-ink: #ffffff;
-	--subtle-bg: #e7edf1;
+	--subtle-bg: #e8f0f1;
 	--hero-bg: #1d3d52;
+	--texture-color: rgba(92, 83, 64, .055);
 }
 
 * {
@@ -42,34 +46,44 @@ body {
 }
 
 .appShell {
-	min-height: 100vh;
+	min-height: 100dvh;
 	color: var(--ink);
 	background: var(--paper);
-	transition: color .2s ease, background-color .2s ease;
+	background-image: radial-gradient(var(--texture-color) .55px, transparent .8px);
+	background-size: 6px 6px;
+	transition: color .36s ease, background-color .36s ease;
 }
 
 .appShell[data-theme="dark"] {
 	--ink: #edf4f7;
 	--muted: #bac8d0;
-	--paper: #151f26;
-	--surface: #24343f;
+	--paper: #182126;
+	--surface: #25343a;
+	--surface-cool: #263a3b;
+	--accent-amber: #e0ad56;
+	--accent-sage: #94b5a3;
 	--brand-blue: #20a5e0;
 	--brand-blue-hover: #1685ba;
 	--brand-blue-light: #8cd6ff;
 	--brand-coral: #ff817d;
-	--line: #3b4d58;
+	--line: #3b4b4b;
 	--dark-muted: #bac8d0;
-	--header-bg: #1d2a33;
-	--footer-bg: #10181e;
+	--header-bg: #202d32;
+	--footer-bg: #111b20;
 	--footer-ink: #edf4f7;
-	--subtle-bg: #2b3b45;
+	--subtle-bg: #304141;
 	--hero-bg: #102b3b;
+	--texture-color: rgba(237, 232, 215, .045);
 	color-scheme: dark;
 }
 
 button,
 a {
 	font: inherit;
+}
+
+button {
+	color: inherit;
 }
 
 a {
@@ -79,4 +93,15 @@ a {
 ::selection {
 	color: var(--white);
 	background: var(--brand-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: .01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: .01ms !important;
+	}
 }

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { connectDBUser } = require('../config/db');
+const { connectDBUser } = require('../db/db');
 const vehicleSchema = require('../config/vehicleSchema');
 
 const Vehicle = mongoose.models.Vehicle || mongoose.model('Vehicle', vehicleSchema);
@@ -20,11 +20,14 @@ function serializeVehicle(vehicle) {
 
     const plainVehicle = vehicle.toObject ? vehicle.toObject() : { ...vehicle };
 
-    if (plainVehicle.imagemId) {
-        plainVehicle.imagem = `http://localhost:3000/api/vehicles/${plainVehicle._id}/imagem`;
-    } else {
-        plainVehicle.imagem = '';
+    const apiBaseUrl = process.env.API_BASE_URL;
+    if (!apiBaseUrl) {
+        throw new Error('Missing API_BASE_URL configuration');
     }
+
+    plainVehicle.imagens = (plainVehicle.imagemIds || []).map((_, index) =>
+        `${apiBaseUrl.replace(/\/$/, '')}/vehicles/${plainVehicle._id}/imagens/${index}`,
+    );
 
     return plainVehicle;
 }
@@ -47,13 +50,19 @@ async function storeVehicleImage(file) {
     });
 }
 
-async function createVehicle(vehicleData, file) {
+async function createVehicle(vehicleData, files) {
     await connectDBUser();
 
-    const imageId = await storeVehicleImage(file);
-    if (imageId) {
-        vehicleData.imagemId = imageId;
-        vehicleData.imagemNome = file.originalname;
+    const imageIds = [];
+    for (const file of files) {
+        const imageId = await storeVehicleImage(file);
+        if (imageId) {
+            imageIds.push(imageId);
+        }
+    }
+    if (imageIds.length) {
+        vehicleData.imagemIds = imageIds;
+        vehicleData.imagemNomes = files.map(file => file.originalname);
     }
 
     const createdVehicle = await Vehicle.create(vehicleData);
@@ -87,6 +96,47 @@ async function getVehicleImageStream(imageId) {
     return bucket.openDownloadStream(new mongoose.Types.ObjectId(imageId));
 }
 
+async function updateVehicle(id, vehicleData, files) {
+    await connectDBUser();
+
+    const vehicle = await Vehicle.findById(id);
+    if (!vehicle) {
+        return null;
+    }
+
+    const updateData = { ...vehicleData };
+    delete updateData.imagemIds;
+    delete updateData.imagemNomes;
+
+    if (files?.length) {
+        const imageIds = await Promise.all(files.map(storeVehicleImage));
+        updateData.imagemIds = imageIds;
+        updateData.imagemNomes = files.map(file => file.originalname);
+    }
+
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(
+        id,
+        { $set: updateData },
+        { new: true, runValidators: true },
+    );
+
+    return serializeVehicle(updatedVehicle);
+}
+
+async function deleteVehicle(id) {
+    await connectDBUser();
+    const vehicle = await Vehicle.findById(id);
+    if (!vehicle) {
+        throw new Error('Vehicle not found');
+    }
+    try {
+        await Vehicle.deleteOne({ _id: id });
+        return true;
+    } catch (error) {
+        throw new Error('Error deleting vehicle: ' + error.message);
+    }
+}
+
 module.exports = {
     Vehicle,
     createVehicle,
@@ -94,4 +144,6 @@ module.exports = {
     getVehicleById,
     getVehicleByCat,
     getVehicleImageStream,
+    updateVehicle,
+    deleteVehicle,
 };

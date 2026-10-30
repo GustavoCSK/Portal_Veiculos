@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
+const dotenv = require('dotenv');
 const vehicleRoutes = require('./routes/vehicleRoutes');
 const cors = require('cors');
-require('dotenv').config();
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const app = express();
 const frontendPath = path.join(__dirname, '../../frontend/dist');
@@ -17,5 +19,8 @@ app.get('/{*splat}', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+if (!PORT) {
+    throw new Error('Missing PORT configuration');
+}
 app.listen(PORT, () => console.log(`API rodando na porta ${PORT}`));
