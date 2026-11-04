@@ -5,6 +5,7 @@
     "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev -- --host 0.0.0.0\"",
     "backend": "npm --prefix backend run dev",
     "frontend": "npm --prefix frontend run dev -- --host 0.0.0.0",
+    "test": "npm --prefix backend test && npm --prefix frontend test",
     "build": "npm --prefix frontend run build",
     "start": "npm --prefix backend run start"
   },

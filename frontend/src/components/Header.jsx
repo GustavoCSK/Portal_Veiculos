@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
+
 function Header({ theme, onToggleTheme }) {
     return (
         <header className="header">
@@ -22,7 +25,7 @@ function Header({ theme, onToggleTheme }) {
                         onClick={onToggleTheme}
                         title={theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'}
                     >
-                        <span aria-hidden="true">{theme === 'dark' ? '☼' : '☾'}</span>
+                        <FontAwesomeIcon icon={theme === 'dark' ? faSun : faMoon} aria-hidden="true" />
                     </button>
                 </div>
             </div>

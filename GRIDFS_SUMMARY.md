@@ -4,17 +4,16 @@ This project now uses MongoDB GridFS to store vehicle images.
 
 ## Flow
 
-1. The frontend sends a multipart form request with a file field named `imagem`.
-2. The Express route uses `multer` to read the file into memory.
-3. The controller calls `createVehicle(vehicleData, req.file)`.
-4. The model calls `storeVehicleImage(file)`.
+1. The client sends a multipart form request with one or more files under the repeated `imagens` field.
+2. The Express route uses `multer` to read the images into memory.
+3. The controller calls `createVehicle(vehicleData, files)`.
+4. The model calls `storeVehicleImage(file)` for each image.
 5. `storeVehicleImage` opens a GridFS upload stream using `bucket.openUploadStream(...)`.
-6. The binary data is saved into GridFS.
-7. MongoDB returns the uploaded file `ObjectId`.
-8. The vehicle document stores that `ObjectId` in `imagemId`.
-9. The API returns a vehicle JSON payload with an `imagem` URL like:
-   `http://localhost:3000/api/vehicles/<vehicleId>/imagem`
-10. When the frontend requests that URL, the server reads the file from GridFS and sends the binary data back.
+6. Each binary image is saved into GridFS.
+7. MongoDB returns an `ObjectId` for each uploaded file.
+8. The vehicle document stores all image IDs in `imagemIds` and filenames in `imagemNomes`.
+9. The API returns a vehicle JSON payload with an `imagens` URL list.
+10. When the frontend requests an indexed URL, the server reads that file from GridFS and sends the binary data back.
 
 ## Important concept
 
@@ -24,7 +23,7 @@ It stores a reference to the uploaded GridFS file.
 The relationship is:
 
 ```txt
-Vehicle document -> imagemId -> GridFS file
+Vehicle document -> imagemIds[] -> GridFS files
 ```
 
 ## Main functions
@@ -35,14 +34,14 @@ Creates the GridFS bucket for the project. It points to the database and uses th
 ### `storeVehicleImage(file)`
 Uploads a file to GridFS and returns the generated Mongo `ObjectId`.
 
-### `createVehicle(vehicleData, file)`
-Uploads the image if a file exists, stores `imagemId`, and saves the vehicle record.
+### `createVehicle(vehicleData, files)`
+Uploads every supplied image, stores their IDs in `imagemIds`, and saves the vehicle record.
 
 ### `getVehicleImageStream(imageId)`
 Reads the file from GridFS using the saved `ObjectId` and returns a download stream.
 
 ### `serializeVehicle(vehicle)`
-Adds the `imagem` URL to the returned JSON so the frontend can render it.
+Adds the `imagens` URL list to the returned JSON.
 
 ## Collections
 
@@ -65,15 +64,15 @@ POST /api/vehicles
 
 Multipart form with:
 - text fields (`nome`, `marca`, etc.)
-- file field named `imagem`
+- one or more files named `imagens` (up to 10 files per vehicle)
 
 ### Get image by vehicle
 
 ```txt
-GET /api/vehicles/:id/imagem
+GET /api/vehicles/:id/imagens/:imageIndex
 ```
 
-This reads the GridFS file using the saved `imagemId` and returns the actual image bytes.
+This reads the indexed GridFS file from `imagemIds` and returns its image bytes. A vehicle with one image uses index `0`.
 
 ## Example
 
@@ -84,10 +83,13 @@ A saved vehicle might look like:
   "_id": "...",
   "nome": "Carro",
   "marca": "Fiat",
-  "imagemId": "67f...",
-  "imagemNome": "carro.png",
-  "imagem": "http://localhost:3000/api/vehicles/123/imagem"
+  "imagemIds": ["67f...", "67e..."],
+  "imagemNomes": ["carro.png", "interior.png"],
+  "imagens": [
+    "http://localhost:3000/api/vehicles/123/imagens/0",
+    "http://localhost:3000/api/vehicles/123/imagens/1"
+  ]
 }
 ```
 
-This is the pattern used by the app.
+Every vehicle uses the same `imagemIds` array shape, whether it has one image or several.

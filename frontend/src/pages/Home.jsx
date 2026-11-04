@@ -1,7 +1,9 @@
-import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Cards from '../components/Cards'
+import Products from '../components/Products'
+import Social from '../components/Social'
 
 function Home({ theme, onToggleTheme }) {
     return (
@@ -14,7 +16,7 @@ function Home({ theme, onToggleTheme }) {
                         <h1 id="hero-title">Seu próximo carro está mais perto.</h1>
                         <p className="heroDescription">Uma história feita de confiança, bons negócios e caminhos novos. Encontre aqui o veículo certo para você.</p>
                         <a className="heroAction" href="#estoque">
-                            Ver veículos <span aria-hidden="true">↘</span>
+                            Ver veículos <FontAwesomeIcon icon={faArrowDown} aria-hidden="true" />
                         </a>
                     </div>
                     <div className="heroStamp">
@@ -31,10 +33,11 @@ function Home({ theme, onToggleTheme }) {
                         <p>Boas escolhas para seguir em frente.</p>
                     </div>
                     <div className="vehicleGrid">
-                        <Cards />
+                        <Products />
                     </div>
                 </section>
             </main>
+            <Social />
             <Footer />
         </div>
     )
