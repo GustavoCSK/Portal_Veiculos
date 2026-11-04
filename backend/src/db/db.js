@@ -12,7 +12,7 @@ const {
     DB_PASSWORD,
     DB_ADMIN_USER,
     DB_ADMIN_PASSWORD,
-    AUTH_SOURCE = 'admin',
+    AUTH_SOURCE = DB_NAME,
 } = process.env;
 
 async function DBconnectWithCredentials(username, password) {

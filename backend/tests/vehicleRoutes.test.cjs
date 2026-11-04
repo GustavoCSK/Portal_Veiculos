@@ -352,6 +352,41 @@ describe('vehicle HTTP integration', () => {
         assert.deepEqual(uploadedFiles.map(file => file.originalname), ['front.jpg', 'side.jpg']);
     });
 
+    it('requires authentication to update and delete vehicles', async () => {
+        const id = '507f1f77bcf86cd799439011';
+        const unauthenticatedUpdate = await fetch(`${baseUrl}/vehicles/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome: 'Updated Honda Civic' }),
+        });
+        assert.equal(unauthenticatedUpdate.status, 401);
+
+        model.updateVehicle = async (vehicleId, data) => ({ _id: vehicleId, ...data });
+        const updated = await fetch(`${baseUrl}/vehicles/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer test-token',
+            },
+            body: JSON.stringify({ nome: 'Updated Honda Civic' }),
+        });
+        assert.equal(updated.status, 200);
+        assert.equal((await updated.json()).nome, 'Updated Honda Civic');
+
+        const unauthenticatedDelete = await fetch(`${baseUrl}/vehicles/${id}`, {
+            method: 'DELETE',
+        });
+        assert.equal(unauthenticatedDelete.status, 401);
+
+        model.deleteVehicle = async vehicleId => ({ _id: vehicleId });
+        const deleted = await fetch(`${baseUrl}/vehicles/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: 'Bearer test-token' },
+        });
+        assert.equal(deleted.status, 200);
+        assert.deepEqual(await deleted.json(), { message: 'Vehicle deleted successfully' });
+    });
+
     it('returns the login route and a JSON API 404 for unknown paths', async () => {
         const login = await fetch(`${baseUrl}/login`, { method: 'POST' });
         assert.equal(login.status, 200);

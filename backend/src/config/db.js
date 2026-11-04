@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config({
-    path: path.resolve(__dirname, '../../../credentials.env'),
+    path: path.resolve(__dirname, '../../../.env'),
 });
 
 const {
@@ -14,7 +14,7 @@ const {
     DB_PASSWORD,
     DB_ADMIN_USER,
     DB_ADMIN_PASSWORD,
-    AUTH_SOURCE = 'admin',
+    AUTH_SOURCE = DB_NAME,
 } = process.env;
 
 async function DBconnectWithCredentials(username, password) {
