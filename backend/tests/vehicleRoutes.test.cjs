@@ -89,7 +89,7 @@ describe('vehicle controller unit tests', () => {
     });
 
     it('creates a vehicle with its submitted fields and multiple images', async () => {
-        const vehicleData = { nome: 'Honda Civic' };
+        const vehicleData = { nome: 'Honda Civic', categoria: 'SeDaN' };
         const image = { originalname: 'civic.jpg' };
         const images = [image, { originalname: 'civic-interior.jpg' }];
         model.createVehicle = async (data, files) => ({ ...data, uploaded: files });
@@ -100,7 +100,7 @@ describe('vehicle controller unit tests', () => {
         });
 
         assert.equal(res.statusCode, 201);
-        assert.deepEqual(res.body, { nome: 'Honda Civic', uploaded: images });
+        assert.deepEqual(res.body, { nome: 'Honda Civic', categoria: 'sedan', uploaded: images });
 
         model.createVehicle = async () => { throw new Error('database unavailable'); };
         const failure = await invoke(vehicleController.createVehicle, { body: vehicleData });
@@ -160,11 +160,12 @@ describe('vehicle controller unit tests', () => {
 
         const response = await invoke(vehicleController.updateVehicle, {
             params: { id },
-            body: { nome: 'Updated car' },
+            body: { nome: 'Updated car', categoria: 'SUV' },
             files,
         });
 
         assert.equal(response.statusCode, 200);
+        assert.equal(response.body.categoria, 'suv');
         assert.equal(response.body.imageCount, 2);
         assert.deepEqual(receivedFiles, files);
     });

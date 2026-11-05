@@ -15,6 +15,7 @@ import {
     faExpand,
 } from '@fortawesome/free-solid-svg-icons'
 import { API_URL } from '../config'
+import './DetailedView.css'
 
 function DetailedView({ theme, onToggleTheme }) {
     const { id } = useParams()
@@ -64,6 +65,7 @@ function DetailedView({ theme, onToggleTheme }) {
     const images = vehicle?.imagens || []
     const selectedImageIndex = selectedImage.vehicleId === vehicle?._id ? selectedImage.index : 0
     const activeImage = images[selectedImageIndex] || images[0]
+    const vehicleTitle = `${vehicle?.nome || ''}${vehicle?.ano ? `, ${vehicle.ano}` : ''}`
 
     function moveImage(direction) {
         if (!vehicle || images.length < 2) return
@@ -81,7 +83,7 @@ function DetailedView({ theme, onToggleTheme }) {
             <Header theme={theme} onToggleTheme={onToggleTheme} />
             <main className="detailPage">
                 <div className="detailContent">
-                    <Link className="detailBack" to="/">
+                    <Link className="detailBack" to="/" aria-label="Voltar ao estoque">
                         <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" /> Voltar ao estoque
                     </Link>
                     {loading && <p role="status">Carregando veículo...</p>}
@@ -92,17 +94,17 @@ function DetailedView({ theme, onToggleTheme }) {
                                 className={`detailGallery${isFullscreen ? ' detailGalleryFullscreen' : ''}`}
                                 role={isFullscreen ? 'dialog' : undefined}
                                 aria-modal={isFullscreen ? 'true' : undefined}
-                                aria-label={isFullscreen ? `Galeria de imagens de ${vehicle.nome}` : undefined}
+                                aria-label={isFullscreen ? `Galeria de imagens de ${vehicleTitle}` : undefined}
                             >
                                 {activeImage && (
                                     <div className="detailImageFrame">
-                                        <img className="detailImage" src={activeImage} alt={vehicle.nome} />
+                                        <img className="detailImage" src={activeImage} alt={vehicleTitle} />
                                         {images.length > 1 && (
                                             <>
                                                 <button
                                                     className="galleryControl galleryPrevious"
                                                     type="button"
-                                                    aria-label={`Imagem anterior de ${vehicle.nome}`}
+                                                    aria-label={`Imagem anterior de ${vehicleTitle}`}
                                                     onClick={() => moveImage(-1)}
                                                 >
                                                     <FontAwesomeIcon icon={faChevronLeft} aria-hidden="true" />
@@ -110,7 +112,7 @@ function DetailedView({ theme, onToggleTheme }) {
                                                 <button
                                                     className="galleryControl galleryNext"
                                                     type="button"
-                                                    aria-label={`Próxima imagem de ${vehicle.nome}`}
+                                                    aria-label={`Próxima imagem de ${vehicleTitle}`}
                                                     onClick={() => moveImage(1)}
                                                 >
                                                     <FontAwesomeIcon icon={faChevronRight} aria-hidden="true" />
@@ -120,7 +122,7 @@ function DetailedView({ theme, onToggleTheme }) {
                                         <button
                                             className="galleryControl galleryFullscreenToggle"
                                             type="button"
-                                            aria-label={isFullscreen ? 'Fechar tela cheia' : `Expandir imagem de ${vehicle.nome}`}
+                                            aria-label={isFullscreen ? 'Fechar tela cheia' : `Expandir imagem de ${vehicleTitle}`}
                                             onClick={toggleFullscreen}
                                         >
                                             <FontAwesomeIcon icon={isFullscreen ? faCompress : faExpand} aria-hidden="true" />
@@ -134,7 +136,7 @@ function DetailedView({ theme, onToggleTheme }) {
                                                 className="detailThumbnail"
                                                 type="button"
                                                 key={image}
-                                                aria-label={`Ver imagem ${index + 1} de ${vehicle.nome}`}
+                                                aria-label={`Ver imagem ${index + 1} de ${vehicleTitle}`}
                                                 aria-pressed={index === selectedImageIndex}
                                                 onClick={() => setSelectedImage({ vehicleId: vehicle._id, index })}
                                             >
@@ -145,13 +147,16 @@ function DetailedView({ theme, onToggleTheme }) {
                                 )}
                             </div>
                             <div className="detailCopy">
-                                <h1 id="detail-title">{vehicle.nome}</h1>
+                                <h1 id="detail-title" className="vehicleTitle" aria-label={vehicleTitle}>
+                                    <span>{vehicle.nome}</span>
+                                    {vehicle.ano && <span className="vehicleYear">{vehicle.ano}</span>}
+                                </h1>
                                 <p className="detailDescription">{vehicle.descricao}</p>
                                 <div className="detailPriceCard">
                                     <p className="detailPriceLabel">Preço</p>
                                     <p className="detailPrice">{formatCurrency(vehicle.preco)}</p>
                                 </div>
-                                <a className="detailContact" href="#VehicleSocial">Falar com a equipe <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a>
+                                <a className="detailContact" href="#questionario">Falar com a equipe <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a>
                             </div>
                         </section>
                     )}

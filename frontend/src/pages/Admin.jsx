@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { AUTH_TOKEN_KEY, API_URL } from '../config'
 import formatCurrency from '../utils/formatCurrency'
+import './Admin.css'
 
 const emptyVehicle = {
     nome: '',
@@ -130,7 +131,10 @@ function Admin() {
 
     function handleFieldChange(event) {
         const { name, value } = event.target
-        setVehicle(current => ({ ...current, [name]: value }))
+        setVehicle(current => ({
+            ...current,
+            [name]: name === 'categoria' ? value.toLowerCase() : value,
+        }))
     }
 
     function handleImageSelection(event) {
@@ -153,7 +157,9 @@ function Admin() {
         setNotice('')
 
         const formData = new window.FormData()
-        Object.entries(vehicle).forEach(([name, value]) => formData.append(name, value))
+        Object.entries(vehicle).forEach(([name, value]) => {
+            formData.append(name, name === 'categoria' ? value.toLowerCase() : value)
+        })
         newImages.forEach(({ file }) => formData.append('imagens', file))
         if (editingId) {
             formData.append('keepImageIds', JSON.stringify(editingImages.map(image => image.id)))
@@ -180,7 +186,7 @@ function Admin() {
     }
 
     async function handleDelete(item) {
-        if (!window.confirm(`Remover ${item.nome} do estoque?`)) return
+        if (!window.confirm(`Remover ${item.nome}${item.ano ? ` ${item.ano}` : ''} do estoque?`)) return
 
         setErrorMessage('')
         setNotice('')
@@ -333,8 +339,11 @@ function Admin() {
                                     ? <img src={item.imagens[0]} alt="" />
                                     : <div className="adminVehiclePlaceholder" aria-hidden="true">PV</div>}
                                 <div className="adminVehicleInfo">
-                                    <h3>{item.nome}</h3>
-                                    <p>{[item.marca, item.ano, item.categoria].filter(Boolean).join(' · ')}</p>
+                                    <h3 className="vehicleTitle">
+                                        <span>{item.nome}</span>
+                                        {item.ano && <span className="vehicleYear">{item.ano}</span>}
+                                    </h3>
+                                    <p>{[item.marca, item.categoria].filter(Boolean).join(' · ')}</p>
                                     <strong>{formatCurrency(item.preco)}</strong>
                                 </div>
                                 <div className="adminVehicleActions">

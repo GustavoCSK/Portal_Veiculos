@@ -1,0 +1,137 @@
+.loginPage {
+	min-height: 100dvh;
+	display: grid;
+	place-items: center;
+	padding: 32px 20px;
+}
+
+.loginCard {
+	width: min(100%, 440px);
+	padding: 40px;
+	border: 1px solid var(--line);
+	border-radius: 20px;
+	background: var(--surface);
+	box-shadow: 0 18px 48px rgba(16, 40, 54, .12);
+}
+
+.loginBrand {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 36px;
+	color: var(--ink);
+	text-decoration: none;
+}
+
+.loginBrandName {
+	font-family: 'Lobster', cursive;
+	font-size: 23px;
+}
+
+.loginBrandName span {
+	color: var(--brand-blue);
+}
+
+.loginCard h1 {
+	margin: 0;
+	font-size: clamp(26px, 5vw, 32px);
+	letter-spacing: -.03em;
+}
+
+.loginDescription {
+	margin: 10px 0 28px;
+	color: var(--muted);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.loginForm {
+	display: grid;
+	gap: 20px;
+}
+
+.loginField {
+	display: grid;
+	gap: 8px;
+}
+
+.loginField label {
+	font-size: 13px;
+	font-weight: 650;
+}
+
+.loginField input {
+	width: 100%;
+	min-height: 48px;
+	padding: 0 14px;
+	border: 1px solid var(--line);
+	border-radius: 9px;
+	color: var(--ink);
+	background: var(--paper);
+	font: inherit;
+}
+
+.loginField input:focus-visible {
+	border-color: var(--brand-blue);
+	outline: 3px solid color-mix(in srgb, var(--brand-blue) 22%, transparent);
+	outline-offset: 1px;
+}
+
+.loginSubmit {
+	min-height: 48px;
+	border: 0;
+	border-radius: 9px;
+	color: var(--white);
+	background: var(--brand-blue);
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color .2s ease, transform .2s ease;
+}
+
+.loginSubmit:hover:not(:disabled) {
+	background: var(--brand-blue-hover);
+	transform: translateY(-1px);
+}
+
+.loginSubmit:focus-visible, .loginBackLink:focus-visible, .loginBrand:focus-visible {
+	outline: 3px solid var(--brand-coral);
+	outline-offset: 3px;
+}
+
+.loginSubmit:disabled {
+	cursor: wait;
+	opacity: .7;
+}
+
+.loginMessage {
+	margin: -4px 0 0;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.loginError {
+	color: var(--brand-coral);
+}
+
+.loginSuccess {
+	color: var(--accent-sage);
+}
+
+.loginBackLink {
+	display: inline-block;
+	margin-top: 24px;
+	color: var(--muted);
+	font-size: 13px;
+	text-decoration: none;
+}
+
+.loginBackLink:hover {
+	color: var(--brand-blue);
+}
+
+@media (max-width: 480px) {
+	.loginCard {
+		padding: 30px 24px;
+	}
+}

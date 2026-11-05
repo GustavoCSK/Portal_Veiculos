@@ -2,6 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AUTH_TOKEN_KEY, LOGIN_URL } from '../config'
+import './Login.css'
 
 function Login() {
     const location = useLocation()

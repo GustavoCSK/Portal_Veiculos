@@ -7,6 +7,7 @@ import {
     SECONDARY_PHONE,
     SECONDARY_PHONE_DISPLAY,
 } from '../config'
+import './Footer.css'
 
 function Footer() {
     return (

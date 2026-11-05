@@ -12,6 +12,7 @@ const vehicles = [
   {
     _id: 'sedan-1',
     nome: 'Honda Civic',
+    ano: 2021,
     descricao: 'Sedan confortável\n  Bem conservado',
     preco: 125000,
     categoria: 'Sedan',
@@ -22,6 +23,7 @@ const vehicles = [
   {
     _id: 'suv-1',
     nome: 'Jeep Compass',
+    ano: 2023,
     descricao: 'SUV para a família',
     preco: 145000,
     categoria: 'SUV',
@@ -60,18 +62,18 @@ describe('vehicle portal user flows', () => {
   it('loads inventory, filters and clears categories, navigates to details, and persists the theme', async () => {
     openAt()
 
-    expect(await screen.findByRole('link', { name: 'Ver detalhes de Honda Civic' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Ver detalhes de Jeep Compass' })).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'Ver detalhes de Honda Civic, 2021' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Ver detalhes de Jeep Compass, 2023' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Seu próximo carro está mais perto.' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'SUV' }))
-    expect(await screen.findByRole('link', { name: 'Ver detalhes de Jeep Compass' })).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'Ver detalhes de Jeep Compass, 2023' })).toBeInTheDocument()
     await waitFor(() => {
-      expect(screen.queryByRole('link', { name: 'Ver detalhes de Honda Civic' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('link', { name: 'Ver detalhes de Honda Civic, 2021' })).not.toBeInTheDocument()
     })
 
     fireEvent.click(screen.getByRole('button', { name: 'SUV' }))
-    expect(await screen.findByRole('link', { name: 'Ver detalhes de Honda Civic' })).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'Ver detalhes de Honda Civic, 2021' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Ativar tema escuro' }))
     expect(screen.getByRole('button', { name: 'Ativar tema claro' })).toHaveAttribute('aria-pressed', 'true')
@@ -79,15 +81,21 @@ describe('vehicle portal user flows', () => {
       expect(window.localStorage.getItem('portal-veiculos-theme')).toBe('dark')
     })
 
-    fireEvent.click(screen.getByRole('link', { name: 'Ver detalhes de Honda Civic' }))
-    expect(await screen.findByRole('heading', { name: 'Honda Civic' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('link', { name: 'Ver detalhes de Honda Civic, 2021' }))
+    expect(await screen.findByRole('heading', { name: 'Honda Civic, 2021' })).toBeInTheDocument()
     const description = screen.getByText('Sedan confortável Bem conservado')
     expect(description.textContent).toBe('Sedan confortável\n  Bem conservado')
-    fireEvent.click(screen.getByRole('button', { name: 'Ver imagem 2 de Honda Civic' }))
-    expect(screen.getByRole('img', { name: 'Honda Civic' })).toHaveAttribute('src', '/civic-side.jpg')
+    const teamContactLink = screen.getByRole('link', { name: /Falar com a equipe/ })
+    expect(teamContactLink).toHaveAttribute('href', '#questionario')
+    expect(document.querySelector('#questionario')).toHaveTextContent('Responda nosso questionário')
+    const stockLink = screen.getByRole('link', { name: 'Voltar ao estoque' })
+    expect(stockLink).toHaveClass('detailBack')
+    expect(stockLink).toHaveAttribute('href', '/')
+    fireEvent.click(screen.getByRole('button', { name: 'Ver imagem 2 de Honda Civic, 2021' }))
+    expect(screen.getByRole('img', { name: 'Honda Civic, 2021' })).toHaveAttribute('src', '/civic-side.jpg')
     expect(screen.getByText(content => content.includes('125.000,00'))).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Tenho interesse em financiar' }))
+    fireEvent.click(screen.getAllByRole('radio', { name: 'Sim' })[1])
     const contactLink = screen.getByRole('link', { name: 'Iniciar conversa pelo WhatsApp' })
     expect(new URL(contactLink.href).searchParams.get('text')).toContain('Gostaria de financiar')
 
@@ -180,7 +188,7 @@ describe('vehicle portal user flows', () => {
     fireEvent.change(screen.getByLabelText('Nome do veículo'), { target: { value: 'Toyota Corolla' } })
     fireEvent.change(screen.getByLabelText('Marca'), { target: { value: 'Toyota' } })
     fireEvent.change(screen.getByLabelText('Ano'), { target: { value: '2024' } })
-    fireEvent.change(screen.getByLabelText('Categoria'), { target: { value: 'Sedan' } })
+    fireEvent.change(screen.getByLabelText('Categoria'), { target: { value: 'SeDaN' } })
     fireEvent.change(screen.getByLabelText('Preço (R$)'), { target: { value: '135000' } })
     fireEvent.change(screen.getByLabelText('Descrição'), { target: { value: 'Sedan confortável' } })
 
@@ -200,6 +208,7 @@ describe('vehicle portal user flows', () => {
     const [createUrl, createData, createAuthConfig] = axios.post.mock.calls[1]
     expect(createUrl).toBe(API_URL)
     expect(createData.get('nome')).toBe('Toyota Corolla')
+    expect(createData.get('categoria')).toBe('sedan')
     expect(createData.getAll('imagens')).toHaveLength(1)
     expect(createData.get('imagens').name).toBe('corolla.jpg')
     expect(createAuthConfig.headers.Authorization).toBe('Bearer test-token')

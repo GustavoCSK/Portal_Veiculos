@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Products from '../components/Products'
 import Social from '../components/Social'
+import './Home.css'
 
 function Home({ theme, onToggleTheme }) {
     return (

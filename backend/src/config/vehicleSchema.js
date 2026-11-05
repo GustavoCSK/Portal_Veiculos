@@ -7,7 +7,7 @@ const vehicleSchema = new mongoose.Schema(
 		ano: Number,
 		descricao: String,
 		preco: Number,
-		categoria: String,
+		categoria: { type: String, lowercase: true },
 		imagemIds: { type: [mongoose.Schema.Types.ObjectId], default: [] },
 		imagemNomes: { type: [String], default: [] },
 	},

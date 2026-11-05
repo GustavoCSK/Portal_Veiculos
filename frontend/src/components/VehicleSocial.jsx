@@ -1,82 +1,91 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { GOOGLE_MAPS_EMBED_URL, WHATSAPP_URL } from '../config'
+import './VehicleSocial.css'
 
 function VehicleSocial({ vehicle }) {
-    const [interests, setInterests] = useState([])
+    const [answers, setAnswers] = useState({ troca: 'nao', financiamento: 'nao' })
 
     if (!vehicle) {
         return null
     }
 
-    const messageParts = [`Olá, estou interessado no veículo ${vehicle.nome}`]
+    const messageParts = [`Olá, estou interessado no veículo ${vehicle.nome}${vehicle.ano ? ` ${vehicle.ano}` : ''}`]
 
-    if (interests.includes('troca')) {
+    if (answers.troca === 'sim') {
         messageParts.push('Tenho um veículo para oferecer na troca')
     }
 
-    if (interests.includes('financiamento')) {
+    if (answers.financiamento === 'sim') {
         messageParts.push('Gostaria de financiar')
     }
 
     const whatsappUrl = new URL(WHATSAPP_URL)
     whatsappUrl.searchParams.set('text', messageParts.join('. '))
 
-    function handleInterestChange(event) {
-        const { checked, value } = event.target
-        setInterests(current => (
-            checked
-                ? [...current, value]
-                : current.filter(interest => interest !== value)
-        ))
+    function handleAnswerChange(question, event) {
+        setAnswers(current => ({ ...current, [question]: event.target.value }))
     }
 
     return (
         <section className="vehicleSocial" aria-labelledby="social-title">
-            <div className="socialIntro">
-                <p className="eyebrow">Estamos por perto</p>
-                <h2 id="social-title">Entre em contato conosco</h2>
-                <p>Converse com nossa equipe ou venha nos visitar em Canoinhas.</p>
-            </div>
-            <div className="msgInfo">
-                <p>O que você procura?</p>
+            <div className="msgInfo" id="questionario">
+                <p>Responda nosso questionário</p>
                 <form aria-label="Preferências de atendimento">
-                    <label className="socialOption" htmlFor="trocaBox">
-                        <input
-                            type="checkbox"
-                            name="interests"
-                            value="troca"
-                            id="trocaBox"
-                            checked={interests.includes('troca')}
-                            onChange={handleInterestChange}
-                        />
-                        Tenho veículo para troca
-                    </label>
-                    <label className="socialOption" htmlFor="financiarBox">
-                        <input
-                            type="checkbox"
-                            name="interests"
-                            value="financiamento"
-                            id="financiarBox"
-                            checked={interests.includes('financiamento')}
-                            onChange={handleInterestChange}
-                        />
-                        Tenho interesse em financiar
-                    </label>
+                    <fieldset className="socialQuestion">
+                        <legend>Tem veículo para oferecer na troca?</legend>
+                        <label className="socialOption">
+                            <input
+                                type="radio"
+                                name="troca"
+                                value="sim"
+                                checked={answers.troca === 'sim'}
+                                onChange={event => handleAnswerChange('troca', event)}
+                            />
+                            Sim
+                        </label>
+                        <label className="socialOption">
+                            <input
+                                type="radio"
+                                name="troca"
+                                value="nao"
+                                checked={answers.troca === 'nao'}
+                                onChange={event => handleAnswerChange('troca', event)}
+                            />
+                            Não
+                        </label>
+                    </fieldset>
+                    <fieldset className="socialQuestion">
+                        <legend>Tem interesse em financiar?</legend>
+                        <label className="socialOption">
+                            <input
+                                type="radio"
+                                name="financiamento"
+                                value="sim"
+                                checked={answers.financiamento === 'sim'}
+                                onChange={event => handleAnswerChange('financiamento', event)}
+                            />
+                            Sim
+                        </label>
+                        <label className="socialOption">
+                            <input
+                                type="radio"
+                                name="financiamento"
+                                value="nao"
+                                checked={answers.financiamento === 'nao'}
+                                onChange={event => handleAnswerChange('financiamento', event)}
+                            />
+                            Não
+                        </label>
+                    </fieldset>
                 </form>
-            </div>
-            <div className="wzap">
-                <div>
-                    <p>Fale com a gente</p>
-                    <span>Atendimento direto pelo WhatsApp</span>
+                <div className="wzap">
+                    <a href={whatsappUrl.toString()} target="_blank" rel="noopener noreferrer" aria-label="Iniciar conversa pelo WhatsApp">
+                        <FontAwesomeIcon icon={faWhatsapp} aria-hidden="true" />
+                        <span>Conversar</span>
+                    </a>
                 </div>
-                <a href={whatsappUrl.toString()} target="_blank" rel="noopener noreferrer" aria-label="Iniciar conversa pelo WhatsApp">
-                    <FontAwesomeIcon icon={faWhatsapp} aria-hidden="true" />
-                    <span>Conversar</span>
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" />
-                </a>
             </div>
             <div className="map">
                 <h3>Mapa com localização</h3>
