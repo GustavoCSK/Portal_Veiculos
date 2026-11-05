@@ -572,6 +572,8 @@
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
 	overflow: hidden;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
 	color: var(--muted);
 	font-size: 13px;
 	line-height: 1.5;
@@ -1282,35 +1284,30 @@
 	color: var(--muted);
 	font-size: 14px;
 	line-height: 1.7;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.detailPriceCard {
+	grid-column: 2;
+	grid-row: 3;
+	display: grid;
+	gap: 12px;
+	padding: 14px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: linear-gradient(120deg, var(--paper), color-mix(in srgb, var(--accent-amber) 11%, var(--paper)));
 }
 
 .detailPriceLabel {
-	grid-column: 2;
-	grid-row: 3;
 	margin: 0;
-	padding: 14px 14px 0;
-	border: 1px solid var(--line);
-	border-bottom: 0;
-	border-radius: 8px 8px 0 0;
-	background: var(--paper);
-	border-radius: 8px 8px 0 0;
-	background: var(--paper);
 	color: var(--muted);
 	font-size: 12px;
 }
 
 .detailPrice {
-	grid-column: 2;
-	grid-row: 4;
 	margin: 0;
-	padding: 4px 14px 14px;
-	border: 1px solid var(--line);
-	border-top: 0;
-	border-radius: 0 0 8px 8px;
-	background: linear-gradient(120deg, var(--paper), color-mix(in srgb, var(--accent-amber) 11%, var(--paper)));
-	font-family: inherit;
-	border-radius: 0 0 8px 8px;
-	background: linear-gradient(120deg, var(--paper), color-mix(in srgb, var(--accent-amber) 11%, var(--paper)));
+	padding-top: 4px;
 	font-family: inherit;
 	font-size: 22px;
 	font-weight: 800;
@@ -1599,6 +1596,7 @@
 	}
 
 	.detailDescription,
+	.detailPriceCard,
 	.detailPriceLabel,
 	.detailPrice {
 		grid-column: 1;
@@ -1681,6 +1679,599 @@
 	}
 
 	.footerBottom {
+		flex-direction: column;
+	}
+}
+
+.loginPage {
+	min-height: 100dvh;
+	display: grid;
+	place-items: center;
+	padding: 32px 20px;
+}
+
+.loginCard {
+	width: min(100%, 440px);
+	padding: 40px;
+	border: 1px solid var(--line);
+	border-radius: 20px;
+	background: var(--surface);
+	box-shadow: 0 18px 48px rgba(16, 40, 54, .12);
+}
+
+.loginBrand {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 36px;
+	color: var(--ink);
+	text-decoration: none;
+}
+
+.loginBrandMark {
+	width: 44px;
+	height: 44px;
+	display: grid;
+	place-items: center;
+	border: 2px solid var(--brand-blue);
+	border-radius: 50%;
+	color: var(--brand-blue);
+	font-family: 'Lobster', cursive;
+	font-size: 15px;
+}
+
+.loginBrandName {
+	font-family: 'Lobster', cursive;
+	font-size: 23px;
+}
+
+.loginBrandName span {
+	color: var(--brand-blue);
+}
+
+.loginEyebrow {
+	margin: 0 0 8px;
+	color: var(--brand-coral);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.loginCard h1 {
+	margin: 0;
+	font-size: clamp(26px, 5vw, 32px);
+	letter-spacing: -.03em;
+}
+
+.loginDescription {
+	margin: 10px 0 28px;
+	color: var(--muted);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.loginForm {
+	display: grid;
+	gap: 20px;
+}
+
+.loginField {
+	display: grid;
+	gap: 8px;
+}
+
+.loginField label {
+	font-size: 13px;
+	font-weight: 650;
+}
+
+.loginField input {
+	width: 100%;
+	min-height: 48px;
+	padding: 0 14px;
+	border: 1px solid var(--line);
+	border-radius: 9px;
+	color: var(--ink);
+	background: var(--paper);
+	font: inherit;
+}
+
+.loginField input:focus-visible {
+	border-color: var(--brand-blue);
+	outline: 3px solid color-mix(in srgb, var(--brand-blue) 22%, transparent);
+	outline-offset: 1px;
+}
+
+.loginSubmit {
+	min-height: 48px;
+	border: 0;
+	border-radius: 9px;
+	color: var(--white);
+	background: var(--brand-blue);
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color .2s ease, transform .2s ease;
+}
+
+.loginSubmit:hover:not(:disabled) {
+	background: var(--brand-blue-hover);
+	transform: translateY(-1px);
+}
+
+.loginSubmit:focus-visible,
+.loginBackLink:focus-visible,
+.loginBrand:focus-visible {
+	outline: 3px solid var(--brand-coral);
+	outline-offset: 3px;
+}
+
+.loginSubmit:disabled {
+	cursor: wait;
+	opacity: .7;
+}
+
+.loginMessage {
+	margin: -4px 0 0;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.loginError {
+	color: var(--brand-coral);
+}
+
+.loginSuccess {
+	color: var(--accent-sage);
+}
+
+.loginBackLink {
+	display: inline-block;
+	margin-top: 24px;
+	color: var(--muted);
+	font-size: 13px;
+	text-decoration: none;
+}
+
+.loginBackLink:hover {
+	color: var(--brand-blue);
+}
+
+@media (max-width: 480px) {
+	.loginCard {
+		padding: 30px 24px;
+	}
+}
+
+.adminPage {
+	min-height: 100dvh;
+	background: var(--paper);
+}
+
+.adminHeader {
+	min-height: 72px;
+	padding: 12px max(24px, calc((100% - 1200px) / 2));
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	border-bottom: 1px solid var(--line);
+	background: var(--surface);
+}
+
+.adminBrand,
+.adminHeaderActions {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.adminBrand {
+	text-decoration: none;
+}
+
+.adminBrand > span:last-child {
+	display: grid;
+	gap: 3px;
+}
+
+.adminBrand strong {
+	font-size: 15px;
+}
+
+.adminBrand small {
+	color: var(--muted);
+	font-size: 11px;
+}
+
+.adminHeaderActions a,
+.adminHeaderActions button,
+.adminCancelButton,
+.adminRefreshButton,
+.adminVehicleActions button,
+.adminImageItem button {
+	min-height: 38px;
+	padding: 0 12px;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	color: var(--ink);
+	background: var(--surface);
+	font-size: 12px;
+	font-weight: 650;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.adminContent {
+	width: min(1120px, calc(100% - 48px));
+	margin: 0 auto;
+	padding: 48px 0 72px;
+}
+
+.adminIntro,
+.adminSectionHeading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.adminIntro {
+	margin-bottom: 28px;
+}
+
+.adminIntro h1 {
+	margin: 0;
+	font-size: clamp(28px, 4vw, 38px);
+	letter-spacing: -.035em;
+}
+
+.adminIntro > div > p:last-child,
+.adminSectionHeading p {
+	margin: 7px 0 0;
+	color: var(--muted);
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.adminInventoryCount {
+	padding: 9px 13px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	color: var(--brand-blue);
+	background: var(--surface);
+	font-size: 12px;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.adminFormCard,
+.adminInventory {
+	padding: 26px;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: var(--surface);
+	box-shadow: 0 8px 24px rgba(16, 40, 54, .045);
+}
+
+.adminFormCard {
+	margin-bottom: 28px;
+}
+
+.adminSectionHeading {
+	margin-bottom: 22px;
+}
+
+.adminSectionHeading h2 {
+	margin: 0;
+	font-size: 19px;
+	letter-spacing: -.02em;
+}
+
+.adminForm {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px 20px;
+}
+
+.adminField {
+	display: grid;
+	align-content: start;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 650;
+}
+
+.adminField input,
+.adminField textarea {
+	width: 100%;
+	min-height: 44px;
+	padding: 10px 12px;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	color: var(--ink);
+	background: var(--paper);
+	font: inherit;
+	font-weight: 400;
+}
+
+.adminField textarea {
+	resize: vertical;
+}
+
+.adminField input:focus-visible,
+.adminField textarea:focus-visible {
+	border-color: var(--brand-blue);
+	outline: 3px solid color-mix(in srgb, var(--brand-blue) 22%, transparent);
+	outline-offset: 1px;
+}
+
+.adminFileInput {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	clip-path: inset(50%);
+}
+
+.adminFilePicker {
+	width: fit-content;
+	min-height: 38px;
+	padding: 0 12px;
+	display: inline-flex;
+	align-items: center;
+	border: 1px dashed var(--brand-blue);
+	border-radius: 7px;
+	color: var(--brand-blue);
+	background: color-mix(in srgb, var(--brand-blue) 6%, var(--surface));
+	font-size: 12px;
+	font-weight: 650;
+	cursor: pointer;
+}
+
+.adminField:has(.adminFileInput:focus-visible) .adminFilePicker {
+	outline: 3px solid color-mix(in srgb, var(--brand-blue) 22%, transparent);
+	outline-offset: 2px;
+}
+
+.adminField small {
+	color: var(--muted);
+	font-size: 11px;
+	font-weight: 400;
+	line-height: 1.5;
+}
+
+.adminFieldWide {
+	grid-column: 1 / -1;
+}
+
+.adminImageList {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.adminImageItem {
+	position: relative;
+	width: 128px;
+	height: 92px;
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	background: var(--paper);
+}
+
+.adminImageItem img {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: cover;
+}
+
+.adminImageItem button {
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
+	min-height: 28px;
+	padding: 0 8px;
+	border-color: rgba(255, 255, 255, .5);
+	color: #fff;
+	background: rgba(29, 61, 82, .88);
+	font-size: 10px;
+}
+
+.adminImageItem button {
+	width: 26px;
+	height: 26px;
+	min-height: 26px;
+	padding: 0;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	font-size: 20px;
+	line-height: 1;
+}
+
+.adminFeedback {
+	grid-column: 1 / -1;
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.adminError {
+	color: var(--brand-coral);
+}
+
+.adminSuccess {
+	color: var(--accent-sage);
+}
+
+.adminSaveButton {
+	min-height: 44px;
+	padding: 0 18px;
+	justify-self: start;
+	border: 0;
+	border-radius: 7px;
+	color: var(--white);
+	background: var(--brand-blue);
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.adminSaveButton:hover:not(:disabled) {
+	background: var(--brand-blue-hover);
+}
+
+.adminSaveButton:disabled,
+.adminRefreshButton:disabled {
+	cursor: wait;
+	opacity: .65;
+}
+
+.adminCancelButton,
+.adminRefreshButton {
+	min-height: 36px;
+}
+
+.adminEmpty,
+.adminLoading {
+	padding: 20px;
+	border: 1px dashed var(--line);
+	border-radius: 8px;
+	color: var(--muted);
+	font-size: 13px;
+	text-align: center;
+}
+
+.adminVehicleList {
+	display: grid;
+	gap: 10px;
+}
+
+.adminVehicle {
+	min-height: 104px;
+	padding: 12px;
+	display: grid;
+	grid-template-columns: 112px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 16px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--surface) 70%, var(--paper));
+}
+
+.adminVehicle > img,
+.adminVehiclePlaceholder {
+	width: 112px;
+	height: 78px;
+	border-radius: 5px;
+	object-fit: cover;
+}
+
+.adminVehiclePlaceholder {
+	display: grid;
+	place-items: center;
+	color: var(--muted);
+	background: var(--subtle-bg);
+	font-family: 'Lobster', cursive;
+	font-size: 20px;
+}
+
+.adminVehicleInfo h3 {
+	margin: 0;
+	font-size: 15px;
+}
+
+.adminVehicleInfo p {
+	margin: 5px 0;
+	color: var(--muted);
+	font-size: 11px;
+}
+
+.adminVehicleInfo strong {
+	font-size: 12px;
+}
+
+.adminVehicleActions {
+	display: flex;
+	gap: 8px;
+}
+
+.adminVehicleActions .adminDeleteButton {
+	border-color: color-mix(in srgb, var(--brand-coral) 38%, var(--line));
+	color: var(--brand-coral);
+}
+
+.adminHeaderActions a:focus-visible,
+.adminHeaderActions button:focus-visible,
+.adminCancelButton:focus-visible,
+.adminRefreshButton:focus-visible,
+.adminVehicleActions button:focus-visible,
+.adminImageItem button:focus-visible,
+.adminSaveButton:focus-visible {
+	outline: 3px solid var(--brand-coral);
+	outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+	.adminHeader {
+		padding-right: 20px;
+		padding-left: 20px;
+	}
+
+	.adminContent {
+		width: min(100% - 32px, 560px);
+		padding-top: 32px;
+	}
+
+	.adminFormCard,
+	.adminInventory {
+		padding: 20px;
+	}
+
+	.adminForm {
+		grid-template-columns: 1fr;
+	}
+
+	.adminFieldWide,
+	.adminFeedback {
+		grid-column: auto;
+	}
+
+	.adminVehicle {
+		grid-template-columns: 78px minmax(0, 1fr);
+		gap: 12px;
+	}
+
+	.adminVehicle > img,
+	.adminVehiclePlaceholder {
+		width: 78px;
+		height: 68px;
+	}
+
+	.adminVehicleActions {
+		grid-column: 1 / -1;
+		justify-content: flex-end;
+	}
+}
+
+@media (max-width: 420px) {
+	.adminIntro,
+	.adminSectionHeading {
+		align-items: flex-start;
+	}
+
+	.adminIntro {
+		flex-direction: column;
+	}
+
+	.adminSectionHeading {
 		flex-direction: column;
 	}
 }

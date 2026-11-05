@@ -147,8 +147,10 @@ function DetailedView({ theme, onToggleTheme }) {
                             <div className="detailCopy">
                                 <h1 id="detail-title">{vehicle.nome}</h1>
                                 <p className="detailDescription">{vehicle.descricao}</p>
-                                <p className="detailPriceLabel">Preço</p>
-                                <p className="detailPrice">{formatCurrency(vehicle.preco)}</p>
+                                <div className="detailPriceCard">
+                                    <p className="detailPriceLabel">Preço</p>
+                                    <p className="detailPrice">{formatCurrency(vehicle.preco)}</p>
+                                </div>
                                 <a className="detailContact" href="#VehicleSocial">Falar com a equipe <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a>
                             </div>
                         </section>

@@ -1,8 +1,20 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
+import Login from './pages/Login'
+import Admin from './pages/Admin'
 import DetailedView from './components/DetailedView'
+import { AUTH_TOKEN_KEY } from './config'
+
+function ProtectedRoute({ children }) {
+  const location = useLocation()
+  const token = window.localStorage.getItem(AUTH_TOKEN_KEY)
+
+  return token
+    ? children
+    : <Navigate to="/login" replace state={{ from: location }} />
+}
 
 function App() {
   const [theme, setTheme] = useState(() => (
@@ -18,6 +30,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="/detalhes/:id" element={<DetailedView theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />} />
         </Routes>
       </BrowserRouter>

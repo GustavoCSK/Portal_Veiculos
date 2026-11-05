@@ -9,6 +9,8 @@ const {
 } = import.meta.env
 
 export const API_URL = VITE_API_URL
+export const LOGIN_URL = API_URL.replace(/\/vehicles\/?$/, '/login')
+export const AUTH_TOKEN_KEY = 'portal-veiculos-token'
 export const WHATSAPP_URL = VITE_WHATSAPP_URL
 export const GOOGLE_MAPS_EMBED_URL = VITE_GOOGLE_MAPS_EMBED_URL
 export const CONTACT_PHONE = VITE_CONTACT_PHONE
