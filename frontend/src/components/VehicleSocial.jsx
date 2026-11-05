@@ -88,7 +88,7 @@ function VehicleSocial({ vehicle }) {
                 </div>
             </div>
             <div className="map">
-                <h3>Mapa com localização</h3>
+                <h3>Nossa localização</h3>
                 <iframe
                     src={GOOGLE_MAPS_EMBED_URL}
                     title="Localização da Portal Veículos em Canoinhas"

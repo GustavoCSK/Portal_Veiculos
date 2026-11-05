@@ -192,6 +192,85 @@
 	grid-column: 1 / -1;
 }
 
+.adminCategoryOptions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.adminCategoryChip {
+	min-height: 34px;
+	padding: 0 12px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	color: var(--ink);
+	background: linear-gradient(180deg, var(--surface), var(--subtle-bg));
+	font: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 1px 2px rgba(16, 40, 54, .06);
+	transition: border-color .2s ease, color .2s ease, background .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.adminCategoryChip:hover:not(:disabled) {
+	border-color: var(--accent-amber);
+	transform: translateY(-1px);
+	box-shadow: 0 3px 8px rgba(16, 40, 54, .12);
+}
+
+.adminCategoryChip[aria-pressed="true"] {
+	border-color: var(--brand-blue);
+	color: var(--white);
+	background: linear-gradient(180deg, color-mix(in srgb, var(--brand-blue) 90%, white), var(--brand-blue) 55%, var(--brand-blue-hover));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 2px 5px rgba(8, 127, 181, .22);
+}
+
+.adminAddCategoryButton {
+	border-style: dashed;
+	color: var(--brand-blue);
+	background: color-mix(in srgb, var(--brand-blue) 6%, var(--surface));
+}
+
+.adminAddCategoryButton > span, .adminAddCategoryConfirm > span {
+	font-size: 17px;
+	line-height: 1;
+}
+
+.adminAddCategoryForm {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.adminAddCategoryForm input {
+	width: min(180px, 42vw);
+	min-height: 34px;
+	padding: 6px 9px;
+	border: 1px solid var(--brand-blue);
+	border-radius: 7px;
+	color: var(--ink);
+	background: var(--paper);
+	font: inherit;
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.adminAddCategoryForm input:focus-visible, .adminCategoryChip:focus-visible {
+	outline: 3px solid color-mix(in srgb, var(--brand-blue) 22%, transparent);
+	outline-offset: 2px;
+}
+
+.adminCategoryChip:disabled {
+	cursor: not-allowed;
+	opacity: .55;
+}
+
 .adminImageList {
 	display: flex;
 	flex-wrap: wrap;

@@ -5,7 +5,6 @@ const { Vehicle } = require('./src/models/vehicleModel');
 const testVehicles = [
     {
         nome: 'Hatch de teste',
-        marca: 'Portal Teste',
         ano: 2022,
         categoria: 'hatch',
         descricao: 'Veiculo de teste para a categoria hatch.',
@@ -18,7 +17,6 @@ const testVehicles = [
     },
     {
         nome: 'SUV de teste',
-        marca: 'Portal Teste',
         ano: 2023,
         categoria: 'suv',
         descricao: 'Veiculo de teste para a categoria SUV.',
@@ -31,7 +29,6 @@ const testVehicles = [
     },
     {
         nome: 'Pickup de teste',
-        marca: 'Portal Teste',
         ano: 2021,
         categoria: 'pickup',
         descricao: 'Veiculo de teste para a categoria pickup.',
@@ -44,7 +41,6 @@ const testVehicles = [
     },
     {
         nome: 'Sedan de teste',
-        marca: 'Portal Teste',
         ano: 2022,
         categoria: 'sedan',
         descricao: 'Veiculo de teste para a categoria sedan.',
@@ -57,7 +53,6 @@ const testVehicles = [
     },
     {
         nome: 'Crossover de teste',
-        marca: 'Portal Teste',
         ano: 2024,
         categoria: 'crossover',
         descricao: 'Veiculo de teste para a categoria crossover.',
@@ -124,7 +119,7 @@ async function main() {
                 })),
             );
             await Vehicle.updateOne(
-                { nome: vehicleData.nome, marca: vehicleData.marca },
+                { nome: vehicleData.nome },
                 {
                     $set: {
                         ...vehicleData,

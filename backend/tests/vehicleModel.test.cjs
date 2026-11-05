@@ -13,6 +13,8 @@ require.cache[dbPath] = dbStub;
 
 const vehicleModel = require('../src/models/vehicleModel');
 const { Vehicle } = vehicleModel;
+const vehicleSchema = require('../src/config/vehicleSchema');
+const originalFind = Vehicle.find;
 const originalFindById = Vehicle.findById;
 const originalFindByIdAndUpdate = Vehicle.findByIdAndUpdate;
 const originalBucketDescriptor = Object.getOwnPropertyDescriptor(mongoose.mongo, 'GridFSBucket');
@@ -39,6 +41,7 @@ mongoose.connection.db = {};
 process.env.API_BASE_URL = 'http://api.test/api';
 
 after(() => {
+    Vehicle.find = originalFind;
     Vehicle.findById = originalFindById;
     Vehicle.findByIdAndUpdate = originalFindByIdAndUpdate;
     Object.defineProperty(mongoose.mongo, 'GridFSBucket', originalBucketDescriptor);
@@ -51,6 +54,25 @@ after(() => {
 });
 
 describe('vehicle model updates', () => {
+    it('does not define a vehicle brand field', () => {
+        assert.equal(vehicleSchema.path('marca'), undefined);
+    });
+
+    it('omits a legacy vehicle brand from API results', async () => {
+        Vehicle.find = () => ({
+            lean: async () => [{
+                _id: new mongoose.Types.ObjectId(),
+                nome: 'Honda Civic',
+                marca: 'Honda',
+            }],
+        });
+
+        const [vehicle] = await vehicleModel.getAllVehicles();
+
+        assert.equal(vehicle.nome, 'Honda Civic');
+        assert.equal('marca' in vehicle, false);
+    });
+
     it('updates vehicle fields without changing images when no files are submitted', async () => {
         const id = new mongoose.Types.ObjectId();
         let update;

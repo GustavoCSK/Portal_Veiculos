@@ -36,6 +36,15 @@
 	transition: background-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 
+@media (min-width: 701px) {
+	.detailBack {
+		top: 84px;
+		right: auto;
+		bottom: auto;
+		left: 24px;
+	}
+}
+
 .detailBack:hover {
 	background: var(--subtle-bg);
 	box-shadow: 0 6px 16px rgba(16, 40, 54, .2);

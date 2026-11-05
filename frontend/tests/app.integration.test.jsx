@@ -12,6 +12,7 @@ const vehicles = [
   {
     _id: 'sedan-1',
     nome: 'Honda Civic',
+    marca: 'Honda',
     ano: 2021,
     descricao: 'Sedan confortável\n  Bem conservado',
     preco: 125000,
@@ -167,12 +168,13 @@ describe('vehicle portal user flows', () => {
 
     expect(await screen.findByRole('heading', { name: 'Veículos cadastrados' })).toBeInTheDocument()
     expect(await screen.findByText('Honda Civic')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Marca')).not.toBeInTheDocument()
+    expect(screen.queryByText('Honda · Sedan')).not.toBeInTheDocument()
     vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
     fireEvent.click(screen.getAllByRole('button', { name: 'Editar' })[0])
 
     fireEvent.click(screen.getByAltText('civic.jpg'))
     expect(screen.getByRole('button', { name: 'Remover imagem civic.jpg' })).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText('Marca'), { target: { value: 'Honda' } })
     fireEvent.change(screen.getByLabelText('Ano'), { target: { value: '2021' } })
     fireEvent.click(screen.getByRole('button', { name: 'Remover imagem civic.jpg' }))
     fireEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }))
@@ -182,13 +184,18 @@ describe('vehicle portal user flows', () => {
     expect(updateUrl).toBe(`${API_URL}/sedan-1`)
     expect(updateData.get('keepImageIds')).toBe('["000000000000000000000002"]')
     expect(updateData.getAll('imagens')).toHaveLength(0)
+    expect(updateData.get('marca')).toBeNull()
     expect(authConfig.headers.Authorization).toBe('Bearer test-token')
 
     expect(await screen.findByRole('button', { name: 'Cadastrar veículo' })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Nome do veículo'), { target: { value: 'Toyota Corolla' } })
-    fireEvent.change(screen.getByLabelText('Marca'), { target: { value: 'Toyota' } })
     fireEvent.change(screen.getByLabelText('Ano'), { target: { value: '2024' } })
-    fireEvent.change(screen.getByLabelText('Categoria'), { target: { value: 'SeDaN' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Sedan' }))
+    expect(screen.getByRole('button', { name: 'Sedan' })).toHaveAttribute('aria-pressed', 'true')
+    fireEvent.click(screen.getByRole('button', { name: 'Adicionar categoria' }))
+    fireEvent.change(screen.getByLabelText('Nome da nova categoria'), { target: { value: 'Crossover' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Cadastrar categoria' }))
+    expect(screen.getByRole('button', { name: 'Crossover' })).toHaveAttribute('aria-pressed', 'true')
     fireEvent.change(screen.getByLabelText('Preço (R$)'), { target: { value: '135000' } })
     fireEvent.change(screen.getByLabelText('Descrição'), { target: { value: 'Sedan confortável' } })
 
@@ -208,7 +215,8 @@ describe('vehicle portal user flows', () => {
     const [createUrl, createData, createAuthConfig] = axios.post.mock.calls[1]
     expect(createUrl).toBe(API_URL)
     expect(createData.get('nome')).toBe('Toyota Corolla')
-    expect(createData.get('categoria')).toBe('sedan')
+    expect(createData.get('marca')).toBeNull()
+    expect(createData.get('categoria')).toBe('crossover')
     expect(createData.getAll('imagens')).toHaveLength(1)
     expect(createData.get('imagens').name).toBe('corolla.jpg')
     expect(createAuthConfig.headers.Authorization).toBe('Bearer test-token')

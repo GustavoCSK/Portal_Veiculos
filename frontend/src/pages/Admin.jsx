@@ -7,7 +7,6 @@ import './Admin.css'
 
 const emptyVehicle = {
     nome: '',
-    marca: '',
     ano: '',
     descricao: '',
     preco: '',
@@ -21,12 +20,20 @@ function Admin() {
     const [editingId, setEditingId] = useState(null)
     const [editingImages, setEditingImages] = useState([])
     const [newImages, setNewImages] = useState([])
+    const [addedCategories, setAddedCategories] = useState([])
+    const [isAddingCategory, setIsAddingCategory] = useState(false)
+    const [newCategory, setNewCategory] = useState('')
     const previewUrls = useRef(new Set())
     const [loading, setLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const [notice, setNotice] = useState('')
     const [formKey, setFormKey] = useState(0)
+    const categories = [...new Map(
+        [...vehicles.map(item => item.categoria), ...addedCategories]
+            .filter(Boolean)
+            .map(category => [category.trim().toLowerCase(), category.trim()]),
+    ).values()]
 
     const getAuthConfig = useCallback(() => ({
         headers: {
@@ -97,6 +104,8 @@ function Admin() {
         setVehicle(emptyVehicle)
         setEditingId(null)
         setEditingImages([])
+        setIsAddingCategory(false)
+        setNewCategory('')
         newImages.forEach(image => URL.revokeObjectURL(image.url))
         previewUrls.current.clear()
         setNewImages([])
@@ -108,7 +117,6 @@ function Admin() {
     function startEditing(item) {
         setVehicle({
             nome: item.nome || '',
-            marca: item.marca || '',
             ano: item.ano ?? '',
             descricao: item.descricao || '',
             preco: item.preco ?? '',
@@ -137,6 +145,19 @@ function Admin() {
         }))
     }
 
+    function handleAddCategory() {
+        const categoryLabel = newCategory.trim()
+        if (!categoryLabel) return
+        const category = categoryLabel.toLowerCase()
+
+        setAddedCategories(current => current.some(item => item.toLowerCase() === category)
+            ? current
+            : [...current, categoryLabel])
+        setVehicle(current => ({ ...current, categoria: category }))
+        setNewCategory('')
+        setIsAddingCategory(false)
+    }
+
     function handleImageSelection(event) {
         const files = Array.from(event.target.files)
         setNewImages(current => [
@@ -152,6 +173,10 @@ function Admin() {
 
     async function handleSubmit(event) {
         event.preventDefault()
+        if (!vehicle.categoria) {
+            setErrorMessage('Selecione ou cadastre uma categoria para o veículo.')
+            return
+        }
         setIsSaving(true)
         setErrorMessage('')
         setNotice('')
@@ -240,30 +265,6 @@ function Admin() {
                         {editingId && <button className="adminCancelButton" type="button" onClick={resetForm}>Cancelar edição</button>}
                     </div>
                     <form className="adminForm" key={formKey} onSubmit={handleSubmit}>
-                        <label className="adminField">
-                            <span>Nome do veículo</span>
-                            <input name="nome" value={vehicle.nome} onChange={handleFieldChange} required />
-                        </label>
-                        <label className="adminField">
-                            <span>Marca</span>
-                            <input name="marca" value={vehicle.marca} onChange={handleFieldChange} required />
-                        </label>
-                        <label className="adminField">
-                            <span>Ano</span>
-                            <input name="ano" type="number" min="1900" max="2100" value={vehicle.ano} onChange={handleFieldChange} required />
-                        </label>
-                        <label className="adminField">
-                            <span>Categoria</span>
-                            <input name="categoria" value={vehicle.categoria} onChange={handleFieldChange} required />
-                        </label>
-                        <label className="adminField">
-                            <span>Preço (R$)</span>
-                            <input name="preco" type="number" min="0" step="0.01" value={vehicle.preco} onChange={handleFieldChange} required />
-                        </label>
-                        <label className="adminField adminFieldWide">
-                            <span>Descrição</span>
-                            <textarea name="descricao" rows="4" value={vehicle.descricao} onChange={handleFieldChange} required />
-                        </label>
                         <div className="adminField adminFieldWide">
                             <span>Fotos do veículo</span>
                             {editingId && editingImages.length > 0 && (
@@ -312,6 +313,73 @@ function Admin() {
                             />
                             <small>{editingId ? 'Remova as fotos que não deseja manter e adicione novas imagens.' : 'Selecione até 10 imagens. Você poderá conferir e remover cada foto antes de salvar.'}</small>
                         </div>
+                        <div className="adminField adminFieldWide">
+                            <span id="admin-category-label">Categoria</span>
+                            <div className="adminCategoryOptions" role="group" aria-labelledby="admin-category-label" aria-required="true">
+                                {categories.map(category => (
+                                    <button
+                                        className="adminCategoryChip"
+                                        type="button"
+                                        key={category}
+                                        aria-pressed={vehicle.categoria === category.toLowerCase()}
+                                        onClick={() => setVehicle(current => ({ ...current, categoria: category.toLowerCase() }))}
+                                    >
+                                        {category}
+                                    </button>
+                                ))}
+                                {isAddingCategory ? (
+                                    <div className="adminAddCategoryForm">
+                                        <input
+                                            autoFocus
+                                            aria-label="Nome da nova categoria"
+                                            value={newCategory}
+                                            onChange={event => setNewCategory(event.target.value)}
+                                            onKeyDown={event => {
+                                                if (event.key === 'Enter') {
+                                                    event.preventDefault()
+                                                    handleAddCategory()
+                                                }
+                                            }}
+                                            placeholder="Nova categoria"
+                                        />
+                                        <button className="adminCategoryChip adminAddCategoryConfirm" type="button" aria-label="Cadastrar categoria" onClick={handleAddCategory} disabled={!newCategory.trim()}>
+                                            <span aria-hidden="true">✓</span>
+                                        </button>
+                                        <button
+                                            className="adminCategoryChip adminAddCategoryCancel"
+                                            type="button"
+                                            aria-label="Cancelar nova categoria"
+                                            onClick={() => {
+                                                setNewCategory('')
+                                                setIsAddingCategory(false)
+                                            }}
+                                        >
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button className="adminCategoryChip adminAddCategoryButton" type="button" onClick={() => setIsAddingCategory(true)}>
+                                        <span aria-hidden="true">+</span> Adicionar categoria
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        <label className="adminField adminFieldWide">
+                            <span>Nome do veículo</span>
+                            <input name="nome" value={vehicle.nome} onChange={handleFieldChange} required />
+                        </label>
+                        <label className="adminField">
+                            <span>Ano</span>
+                            <input name="ano" type="number" min="1900" max="2100" value={vehicle.ano} onChange={handleFieldChange} required />
+                        </label>
+                        <label className="adminField">
+                            <span>Preço (R$)</span>
+                            <input name="preco" type="number" min="0" step="0.01" value={vehicle.preco} onChange={handleFieldChange} required />
+                        </label>
+                        <label className="adminField adminFieldWide">
+                            <span>Descrição</span>
+                            <textarea name="descricao" rows="4" value={vehicle.descricao} onChange={handleFieldChange} required />
+                        </label>
                         {errorMessage && <p className="adminFeedback adminError" role="alert">{errorMessage}</p>}
                         {notice && <p className="adminFeedback adminSuccess" role="status">{notice}</p>}
                         <button className="adminSaveButton" type="submit" disabled={isSaving}>
@@ -343,7 +411,7 @@ function Admin() {
                                         <span>{item.nome}</span>
                                         {item.ano && <span className="vehicleYear">{item.ano}</span>}
                                     </h3>
-                                    <p>{[item.marca, item.categoria].filter(Boolean).join(' · ')}</p>
+                                    <p>{item.categoria}</p>
                                     <strong>{formatCurrency(item.preco)}</strong>
                                 </div>
                                 <div className="adminVehicleActions">
