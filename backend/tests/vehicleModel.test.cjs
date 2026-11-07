@@ -13,6 +13,8 @@ require.cache[dbPath] = dbStub;
 
 const vehicleModel = require('../src/models/vehicleModel');
 const { Vehicle } = vehicleModel;
+const vehicleSchema = require('../src/config/vehicleSchema');
+const originalFind = Vehicle.find;
 const originalFindById = Vehicle.findById;
 const originalFindByIdAndUpdate = Vehicle.findByIdAndUpdate;
 const originalBucketDescriptor = Object.getOwnPropertyDescriptor(mongoose.mongo, 'GridFSBucket');
@@ -39,6 +41,7 @@ mongoose.connection.db = {};
 process.env.API_BASE_URL = 'http://api.test/api';
 
 after(() => {
+    Vehicle.find = originalFind;
     Vehicle.findById = originalFindById;
     Vehicle.findByIdAndUpdate = originalFindByIdAndUpdate;
     Object.defineProperty(mongoose.mongo, 'GridFSBucket', originalBucketDescriptor);
@@ -51,6 +54,25 @@ after(() => {
 });
 
 describe('vehicle model updates', () => {
+    it('does not define a vehicle brand field', () => {
+        assert.equal(vehicleSchema.path('marca'), undefined);
+    });
+
+    it('omits a legacy vehicle brand from API results', async () => {
+        Vehicle.find = () => ({
+            lean: async () => [{
+                _id: new mongoose.Types.ObjectId(),
+                nome: 'Honda Civic',
+                marca: 'Honda',
+            }],
+        });
+
+        const [vehicle] = await vehicleModel.getAllVehicles();
+
+        assert.equal(vehicle.nome, 'Honda Civic');
+        assert.equal('marca' in vehicle, false);
+    });
+
     it('updates vehicle fields without changing images when no files are submitted', async () => {
         const id = new mongoose.Types.ObjectId();
         let update;
@@ -96,6 +118,54 @@ describe('vehicle model updates', () => {
                 `http://api.test/api/vehicles/${id}/imagens/${index}`,
             ),
         );
+    });
+
+    it('keeps selected existing images and appends newly uploaded images', async () => {
+        const id = new mongoose.Types.ObjectId();
+        const retainedImageId = new mongoose.Types.ObjectId();
+        const removedImageId = new mongoose.Types.ObjectId();
+        let update;
+        uploadedFiles.length = 0;
+        Vehicle.findById = async () => ({
+            _id: id,
+            imagemIds: [retainedImageId, removedImageId],
+            imagemNomes: ['keep.jpg', 'remove.jpg'],
+        });
+        Vehicle.findByIdAndUpdate = async (_id, updateData) => {
+            update = updateData.$set;
+            return { _id, ...update };
+        };
+
+        const files = [{ originalname: 'added.jpg', mimetype: 'image/jpeg', buffer: Buffer.from('added') }];
+        await vehicleModel.updateVehicle(id, {
+            nome: 'Updated name',
+            keepImageIds: [retainedImageId.toString()],
+        }, files);
+
+        assert.equal(update.imagemIds[0].toString(), retainedImageId.toString());
+        assert.equal(update.imagemIds.length, 2);
+        assert.notEqual(update.imagemIds[1].toString(), removedImageId.toString());
+        assert.deepEqual(update.imagemNomes, ['keep.jpg', 'added.jpg']);
+        assert.deepEqual(uploadedFiles.map(file => file.filename), ['added.jpg']);
+    });
+
+    it('removes all existing image references when none are retained', async () => {
+        const id = new mongoose.Types.ObjectId();
+        let update;
+        Vehicle.findById = async () => ({
+            _id: id,
+            imagemIds: [new mongoose.Types.ObjectId()],
+            imagemNomes: ['old.jpg'],
+        });
+        Vehicle.findByIdAndUpdate = async (_id, updateData) => {
+            update = updateData.$set;
+            return { _id, ...update };
+        };
+
+        await vehicleModel.updateVehicle(id, { keepImageIds: [] }, []);
+
+        assert.deepEqual(update.imagemIds, []);
+        assert.deepEqual(update.imagemNomes, []);
     });
 
     it('returns null when the vehicle does not exist', async () => {

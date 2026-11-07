@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
 dotenv.config({
-	path: path.resolve(__dirname, "../credentials.env"),
+	path: path.resolve(__dirname, "../.env"),
 });
 
 const DB_NAME = process.env.DB_NAME;

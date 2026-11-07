@@ -3,6 +3,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const vehicleRoutes = require('./routes/vehicleRoutes');
 const cors = require('cors');
+const { connectDBUser } = require('./db/db');
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -23,4 +24,10 @@ const PORT = process.env.PORT;
 if (!PORT) {
     throw new Error('Missing PORT configuration');
 }
-app.listen(PORT, () => console.log(`API rodando na porta ${PORT}`));
+
+connectDBUser()
+    .then(() => app.listen(PORT, () => console.log(`API rodando na porta ${PORT}`)))
+    .catch((error) => {
+        console.error('Failed to connect to MongoDB:', error.message);
+        process.exitCode = 1;
+    });

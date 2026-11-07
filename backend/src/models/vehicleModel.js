@@ -20,6 +20,8 @@ function serializeVehicle(vehicle) {
 
     const plainVehicle = vehicle.toObject ? vehicle.toObject() : { ...vehicle };
 
+    delete plainVehicle.marca;
+
     const apiBaseUrl = process.env.API_BASE_URL;
     if (!apiBaseUrl) {
         throw new Error('Missing API_BASE_URL configuration');
@@ -107,8 +109,21 @@ async function updateVehicle(id, vehicleData, files) {
     const updateData = { ...vehicleData };
     delete updateData.imagemIds;
     delete updateData.imagemNomes;
+    const keepImageIds = updateData.keepImageIds;
+    delete updateData.keepImageIds;
 
-    if (files?.length) {
+    if (Array.isArray(keepImageIds)) {
+        const currentImages = (vehicle.imagemIds || []).map((imageId, index) => ({
+            id: imageId,
+            name: vehicle.imagemNomes?.[index] || '',
+        }));
+        const retainedImages = [...new Set(keepImageIds.map(imageId => imageId.toString()))]
+            .map(imageId => currentImages.find(image => image.id.toString() === imageId))
+            .filter(Boolean);
+        const newImageIds = await Promise.all((files || []).map(storeVehicleImage));
+        updateData.imagemIds = [...retainedImages.map(image => image.id), ...newImageIds];
+        updateData.imagemNomes = [...retainedImages.map(image => image.name), ...(files || []).map(file => file.originalname)];
+    } else if (files?.length) {
         const imageIds = await Promise.all(files.map(storeVehicleImage));
         updateData.imagemIds = imageIds;
         updateData.imagemNomes = files.map(file => file.originalname);

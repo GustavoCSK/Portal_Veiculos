@@ -1,0 +1,471 @@
+.vehicleSocial {
+	width: min(1440px, calc(100% - 64px));
+	margin: 0 auto 56px;
+	padding: 24px;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-rows: 320px;
+	align-items: stretch;
+	gap: 16px 24px;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	background: linear-gradient(120deg, var(--surface), color-mix(in srgb, var(--surface-cool) 36%, var(--surface)) 100%);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 3px 8px rgba(16, 40, 54, .05), 0 12px 24px rgba(16, 40, 54, .04);
+}
+
+.socialIntro {
+	grid-column: 1;
+	grid-row: 1 / span 2;
+}
+
+.socialIntro .eyebrow {
+	margin-bottom: 10px;
+	color: var(--accent-sage);
+}
+
+.socialIntro h2 {
+	margin: 0;
+	font-size: clamp(20px, 2.2vw, 27px);
+	line-height: 1.18;
+}
+
+.socialIntro > p:last-child {
+	margin: 12px 0 0;
+	color: var(--muted);
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+.vehicleSocial .msgInfo {
+	grid-column: 1 / span 2;
+	grid-row: 1;
+	width: 100%;
+	padding: 16px;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(168px, .75fr);
+	grid-template-rows: auto 1fr;
+	align-items: center;
+	gap: 12px 20px;
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: linear-gradient(145deg, var(--surface), var(--paper));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .64), 0 3px 8px rgba(16, 40, 54, .06);
+}
+
+.msgInfo > p {
+	grid-column: 1 / -1;
+	margin: 0 0 12px;
+	color: var(--ink);
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.vehicleSocial .msgInfo form {
+	grid-column: 1;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.vehicleSocial .socialQuestion {
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	border: 0;
+}
+
+.vehicleSocial .socialQuestion legend {
+	width: 100%;
+	margin-bottom: 8px;
+	padding: 0;
+	color: var(--ink);
+	font-size: 14px;
+	font-weight: 750;
+	line-height: 1.4;
+}
+
+.vehicleSocial .msgInfo .socialOption {
+	flex: 1 1 80px;
+	min-height: 44px;
+	padding: 10px 12px;
+	align-items: center;
+	border: 1px solid color-mix(in srgb, var(--brand-blue) 30%, var(--line));
+	border-radius: 9px;
+	background: color-mix(in srgb, var(--brand-blue) 7%, var(--surface));
+	font-size: 13px;
+	font-weight: 650;
+	transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+.vehicleSocial .msgInfo .socialOption:hover, .vehicleSocial .msgInfo .socialOption:has(input:checked) {
+	border-color: var(--brand-blue);
+	background: color-mix(in srgb, var(--brand-blue) 14%, var(--surface));
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-blue) 32%, transparent);
+}
+
+.vehicleSocial .msgInfo input {
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	flex: 0 0 auto;
+	accent-color: var(--accent-sage);
+}
+
+.wzap {
+	width: min(1440px, calc(100% - 64px));
+	margin: 0 auto;
+	padding: 20px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: linear-gradient(145deg, var(--surface), var(--paper));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .64), 0 3px 8px rgba(16, 40, 54, .06), 0 12px 24px rgba(16, 40, 54, .05);
+}
+
+.wzap.wzapLink {
+	width: fit-content;
+	min-height: 58px;
+	margin: 28px auto 0;
+	padding: 14px 26px;
+	justify-content: center;
+	gap: 12px;
+	border: 0;
+	border-radius: 999px;
+	color: #fff;
+	background: #25d366;
+	box-shadow: 0 5px 14px rgba(37, 211, 102, .28);
+	text-decoration: none;
+	transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.wzap.wzapLink:hover {
+	transform: translateY(-2px);
+	background: #1fbd5b;
+	box-shadow: 0 8px 18px rgba(37, 211, 102, .34);
+}
+
+.wzap.wzapLink:focus-visible {
+	outline: 3px solid var(--ink);
+	outline-offset: 3px;
+}
+
+.wzap.wzapLink:active {
+	transform: translateY(0);
+	box-shadow: 0 3px 8px rgba(37, 211, 102, .25);
+}
+
+.wzap.wzapLink p {
+	color: inherit;
+	font-size: 15px;
+}
+
+.wzap.wzapLink > svg {
+	width: 27px;
+	height: 27px;
+	flex: 0 0 auto;
+	color: inherit;
+}
+
+.wzap p {
+	margin: 0;
+	color: var(--ink);
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.wzap a {
+	width: 44px;
+	height: 44px;
+	display: grid;
+	place-items: center;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: linear-gradient(145deg, var(--surface), var(--subtle-bg));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 2px 5px rgba(16, 40, 54, .1);
+	transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.wzap a:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 5px 10px rgba(16, 40, 54, .16);
+}
+
+.wzap a:focus-visible {
+	outline: 3px solid var(--brand-coral);
+	outline-offset: 3px;
+}
+
+.wzap a:active {
+	transform: translateY(1px);
+}
+
+.wzap img, .wzap a svg {
+	width: 28px;
+	height: 28px;
+	display: block;
+}
+
+.vehicleSocial .wzap {
+	grid-column: 2;
+	grid-row: 2;
+	width: auto;
+	height: 100%;
+	margin: 0;
+	padding: 8px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+}
+
+.vehicleSocial .wzap a {
+	width: 168px;
+	height: 168px;
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 8px;
+	border: 0;
+	border-radius: 50%;
+	color: #fff;
+	background: linear-gradient(145deg, #2ee477, #16a34a);
+	box-shadow: 0 9px 22px rgba(37, 211, 102, .32), inset 0 2px 3px rgba(255, 255, 255, .28);
+	font-size: 18px;
+	font-weight: 700;
+	text-decoration: none;
+	transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.vehicleSocial .wzap a:hover {
+	transform: scale(1.04);
+	background: linear-gradient(145deg, #25d366, #128c42);
+	box-shadow: 0 12px 26px rgba(37, 211, 102, .4), inset 0 2px 3px rgba(255, 255, 255, .28);
+}
+
+.vehicleSocial .wzap a:focus-visible {
+	outline: 3px solid var(--ink);
+	outline-offset: 3px;
+}
+
+.vehicleSocial .wzap a:active {
+	transform: scale(.98);
+	box-shadow: 0 4px 12px rgba(37, 211, 102, .25);
+}
+
+.vehicleSocial .wzap a svg {
+	width: 54px;
+	height: 54px;
+	flex: 0 0 auto;
+}
+
+.vehicleSocial .map {
+	grid-column: 3;
+	grid-row: 1;
+	width: calc(100% - 8px);
+	margin-left: 8px;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.vehicleSocial .map h3 {
+	margin: 0;
+	padding: 12px 14px;
+	color: var(--accent-sage);
+	font-size: 13px;
+}
+
+.vehicleSocial .map iframe {
+	min-height: 0;
+	flex: 1;
+	height: auto;
+}
+
+.map {
+	width: min(1440px, calc(100% - 64px));
+	margin: 28px auto 56px;
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: var(--surface);
+	box-shadow: 0 3px 8px rgba(16, 40, 54, .08), 0 12px 24px rgba(16, 40, 54, .06);
+}
+
+.map iframe {
+	width: 100%;
+	height: clamp(280px, 42vw, 450px);
+	display: block;
+}
+
+.msgInfo {
+	width: min(760px, 100%);
+	padding: 16px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: linear-gradient(145deg, var(--surface), var(--paper));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .64), 0 3px 8px rgba(16, 40, 54, .06);
+}
+
+.msgInfo form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 18px;
+}
+
+.msgInfo .socialOption {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	color: var(--ink);
+	font-size: 12px;
+	line-height: 1.4;
+	cursor: pointer;
+}
+
+.msgInfo label {
+	color: var(--ink);
+	font-size: 13px;
+}
+
+.msgInfo input {
+	accent-color: var(--brand-blue);
+}
+
+.msgInfo input:focus-visible {
+	outline: 2px solid var(--brand-blue);
+	outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+
+	.vehicleSocial {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.vehicleSocial .msgInfo {
+		grid-column: 1 / span 2;
+		grid-row: 1;
+	}
+
+	.vehicleSocial .wzap {
+		grid-column: 2;
+		grid-row: 2;
+	}
+
+	.vehicleSocial .map {
+		grid-column: 3;
+		grid-row: 1;
+	}
+}
+
+@media (max-width: 700px) {
+
+	.vehicleSocial {
+		width: calc(100% - 40px);
+		margin-bottom: 40px;
+		padding: 18px;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		gap: 18px;
+	}
+
+	.socialIntro, .vehicleSocial .msgInfo, .vehicleSocial .map {
+		grid-column: 1;
+		grid-row: auto;
+	}
+
+	.vehicleSocial .msgInfo {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		gap: 14px;
+	}
+
+	.vehicleSocial .msgInfo > p, .vehicleSocial .msgInfo form, .vehicleSocial .wzap {
+		grid-column: 1;
+		grid-row: auto;
+	}
+
+	.vehicleSocial .wzap {
+		width: 100%;
+		height: auto;
+		padding: 8px 0;
+		align-items: center;
+	}
+
+	.vehicleSocial .wzap a {
+		align-self: center;
+	}
+
+	.vehicleSocial .map iframe {
+		height: 220px;
+	}
+
+	.vehicleSocial .map {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.wzap, .map {
+		width: calc(100% - 40px);
+	}
+
+	.wzap {
+		padding: 16px;
+	}
+
+	.wzap.wzapLink {
+		width: min(440px, calc(100% - 40px));
+		padding: 12px 20px;
+	}
+
+	.map {
+		margin: 20px auto 40px;
+	}
+
+	.vehicleSocial {
+		width: calc(100% - 40px);
+		margin-bottom: 40px;
+		padding: 18px;
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+
+	.socialIntro, .vehicleSocial .msgInfo, .vehicleSocial .wzap, .vehicleSocial .map {
+		grid-column: 1;
+		grid-row: auto;
+	}
+
+	.vehicleSocial .wzap {
+		align-items: center;
+	}
+
+	.vehicleSocial .wzap a {
+		align-self: center;
+	}
+
+	.vehicleSocial .map iframe {
+		height: 220px;
+	}
+
+	.wzap, .map {
+		width: calc(100% - 40px);
+	}
+
+	.wzap {
+		padding: 16px;
+	}
+
+	.map {
+		margin: 20px auto 40px;
+	}
+}

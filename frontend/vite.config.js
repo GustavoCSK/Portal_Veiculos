@@ -8,6 +8,14 @@ const envDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export default defineConfig({
   envDir,
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: './tests/setup.js',

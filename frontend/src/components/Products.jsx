@@ -3,6 +3,7 @@ import axios from 'axios'
 import CategoryFilter from './CategoryFilter'
 import VehicleCardList from './VehicleCardList'
 import { API_URL } from '../config'
+import './Products.css'
 
 async function fetchVehicles(setVehicles, setCategories) {
     try {

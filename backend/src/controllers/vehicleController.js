@@ -13,6 +13,9 @@ exports.getAllVehicles = async (req, res) => {
 exports.createVehicle = async (req, res) => {
     try {
         const vehicleData = req.body;
+        if (typeof vehicleData.categoria === 'string') {
+            vehicleData.categoria = vehicleData.categoria.toLowerCase();
+        }
         const newVehicle = await vehicleModel.createVehicle(vehicleData, req.files);
         res.status(201).json(newVehicle);
     } catch (error) {
@@ -89,6 +92,23 @@ exports.updateVehicle = async (req, res) => {
 
     try {
         const vehicleData = req.body;
+        if (typeof vehicleData.categoria === 'string') {
+            vehicleData.categoria = vehicleData.categoria.toLowerCase();
+        }
+        if (Object.hasOwn(vehicleData, 'keepImageIds')) {
+            let keepImageIds;
+            try {
+                keepImageIds = Array.isArray(vehicleData.keepImageIds)
+                    ? vehicleData.keepImageIds
+                    : JSON.parse(vehicleData.keepImageIds);
+            } catch {
+                return res.status(400).json({ message: 'Invalid image selection' });
+            }
+            if (!Array.isArray(keepImageIds) || keepImageIds.some(imageId => !mongoose.isValidObjectId(imageId))) {
+                return res.status(400).json({ message: 'Invalid image selection' });
+            }
+            vehicleData.keepImageIds = keepImageIds;
+        }
         const updatedVehicle = await vehicleModel.updateVehicle(id, vehicleData, req.files);
         if (!updatedVehicle) {
             return res.status(404).json({ message: 'Vehicle not found' });

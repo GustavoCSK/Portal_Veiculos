@@ -87,13 +87,13 @@ db.createUser({
 })
 ```
 
-Replace the username placeholders with the values configured in `credentials.env`. `dbAdmin` allows the setup script to create collections and indexes. `userAdmin` lets the setup account manage users within this database; omit it if that account should only manage database structure. Add `readWrite` to the setup account only if the setup script also inserts seed data.
+Replace the username placeholders with the values configured in `.env`. `dbAdmin` allows the setup script to create collections and indexes. `userAdmin` lets the setup account manage users within this database; omit it if that account should only manage database structure. Add `readWrite` to the setup account only if the setup script also inserts seed data.
 
 The application account has only `readWrite` on `portal_veiculos`. Since both project accounts are created in that database, use `AUTH_SOURCE=portal_veiculos` for both connections.
 
 ## Project Configuration
 
-Set these keys in the root `credentials.env`; keep real passwords private and out of version control:
+Set these keys in the root `.env`; replace the password placeholders with your real values and keep them private:
 
 ```dotenv
 DB_HOST=127.0.0.1
@@ -106,35 +106,36 @@ DB_ADMIN_USER=your_setup_user
 DB_ADMIN_PASSWORD=your_setup_password
 ```
 
-The current `backend/src/config/db.js` builds the authenticated MongoDB URI from these values. It exports `connectDBAdmin()` and `connectDBUser()`, both of which use `mongoose.connect()` and return the default Mongoose connection.
+The application and seed process use the `DB_USER` account. `DB_ADMIN_USER` is only for setup and user management in this database; it is not a MongoDB-wide root account. If `AUTH_SOURCE` is omitted, the application now defaults it to `DB_NAME`.
 
-## Run the Setup and Application
+## Enable Authentication Automatically
 
-Run the schema/setup script as a separate Node.js process with the setup account. Close its connection when setup is complete:
+The setup command reuses `backend/src/db/db_create_users.js` to create the configured database users, enables MongoDB authorization in the native server config, makes a timestamped backup of that config, restarts the MongoDB service, and verifies the application account can connect. It does not erase database data. `DB_HOST` must be a loopback address for initial user creation.
+Stop the running API while the database restarts; it can then be started again with the authenticated connection settings.
 
-```javascript
-const { connectDBAdmin } = require("./src/config/db");
+On Ubuntu, run from the repository root with administrator privileges:
 
-async function main() {
-  const connection = await connectDBAdmin();
-
-  try {
-    const database = connection.db;
-    // Create the project's collections and indexes here.
-  } finally {
-    await connection.close();
-  }
-}
-
-main().catch(() => {
-  console.error("Database setup failed.");
-  process.exitCode = 1;
-});
+```bash
+sudo node backend/src/db/enable_auth.js
 ```
 
-The API is a different Node.js process, so it can use `connectDBUser()` once during startup and keep that connection open while serving requests. Do not connect or disconnect on every request.
+On Windows, open PowerShell as Administrator in the repository root and run:
 
-At the time this guide was written, `backend/db_create.js` is empty and `backend/src/server.js` does not yet call `connectDBUser()`. Add the project-specific schema setup and API startup connection before expecting those parts of the application to use MongoDB.
+```powershell
+npm --prefix backend run db:enable-auth
+```
+
+Ubuntu defaults to `/etc/mongod.conf` and the `mongod` systemd service. Windows reads the config path from the registered `MongoDB` service. If a custom path or service name is used, override the defaults in the root `.env`. For example:
+
+```dotenv
+# Ubuntu example:
+MONGODB_CONFIG_FILE=/etc/mongod.conf
+MONGODB_SERVICE_NAME=mongod
+
+# Windows example (use the actual installed version/path):
+# MONGODB_CONFIG_FILE=C:\Program Files\MongoDB\Server\8.0\bin\mongod.cfg
+# MONGODB_SERVICE_NAME=MongoDB
+```
 
 ## Windows (Native Service)
 
@@ -198,4 +199,4 @@ Authenticate as the maintenance account:
 mongosh --host 127.0.0.1 --port 27017 --username portal_root --authenticationDatabase admin --password
 ```
 
-After logging in, follow [Create Project Users](#create-project-users) above. Keep the root account out of `credentials.env`; use the project-specific setup and application users there. If MongoDB was installed without a Windows service, start `mongod.exe` manually with its configuration file and restart that process after editing the configuration.
+After logging in, follow [Create Project Users](#create-project-users) above. Keep the root account out of `.env`; use the project-specific setup and application users there. If MongoDB was installed without a Windows service, start `mongod.exe` manually with its configuration file and restart that process after editing the configuration.

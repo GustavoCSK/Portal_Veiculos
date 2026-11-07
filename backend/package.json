@@ -10,6 +10,7 @@
     "test": "node --test",
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
+    "db:enable-auth": "node src/db/enable_auth.js",
     "seed:test": "node seed_test_vehicles.js"
   },
   "dependencies": {

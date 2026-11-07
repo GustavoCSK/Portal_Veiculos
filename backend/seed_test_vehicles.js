@@ -1,85 +1,106 @@
 const mongoose = require('mongoose');
-const { connectDBAdmin } = require('./src/config/db');
+const { connectDBUser } = require('./src/config/db');
 const { Vehicle } = require('./src/models/vehicleModel');
-
-const PLACEHOLDER_FILENAME = 'test-vehicle-placeholder.svg';
-const PLACEHOLDER_IMAGE = Buffer.from(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
-  <rect width="800" height="500" fill="#edf1ed"/>
-  <path d="M0 360h800v140H0z" fill="#dce4de"/>
-  <path d="M180 322h44l45-91c9-18 24-29 45-29h156c21 0 39 10 51 28l61 92h33c25 0 45 20 45 45v26H135v-39c0-18 16-32 45-32z" fill="#496f61"/>
-  <path d="m293 236-39 78h126v-91h-66c-9 0-16 4-21 13zm110-13v91h153l-51-76c-7-10-16-15-29-15z" fill="#dce9e2"/>
-  <circle cx="254" cy="389" r="43" fill="#283c35"/>
-  <circle cx="254" cy="389" r="19" fill="#e4ebe6"/>
-  <circle cx="556" cy="389" r="43" fill="#283c35"/>
-  <circle cx="556" cy="389" r="19" fill="#e4ebe6"/>
-  <text x="400" y="105" text-anchor="middle" fill="#354c41" font-family="sans-serif" font-size="30" font-weight="700">VEICULO DE TESTE</text>
-  <text x="400" y="145" text-anchor="middle" fill="#61756a" font-family="sans-serif" font-size="18">Imagem provisoria</text>
-</svg>
-`, 'utf8');
 
 const testVehicles = [
     {
         nome: 'Hatch de teste',
-        marca: 'Portal Teste',
         ano: 2022,
         categoria: 'hatch',
         descricao: 'Veiculo de teste para a categoria hatch.',
         preco: 72900,
+        imageUrls: [
+            'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=85',
+        ],
     },
     {
         nome: 'SUV de teste',
-        marca: 'Portal Teste',
         ano: 2023,
         categoria: 'suv',
         descricao: 'Veiculo de teste para a categoria SUV.',
         preco: 128900,
+        imageUrls: [
+            'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1400&q=85',
+        ],
     },
     {
         nome: 'Pickup de teste',
-        marca: 'Portal Teste',
         ano: 2021,
         categoria: 'pickup',
         descricao: 'Veiculo de teste para a categoria pickup.',
         preco: 146500,
+        imageUrls: [
+            'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1400&q=85',
+        ],
     },
     {
         nome: 'Sedan de teste',
-        marca: 'Portal Teste',
         ano: 2022,
         categoria: 'sedan',
         descricao: 'Veiculo de teste para a categoria sedan.',
         preco: 96900,
+        imageUrls: [
+            'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1400&q=85',
+        ],
     },
     {
         nome: 'Crossover de teste',
-        marca: 'Portal Teste',
         ano: 2024,
         categoria: 'crossover',
         descricao: 'Veiculo de teste para a categoria crossover.',
         preco: 119900,
+        imageUrls: [
+            'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1400&q=85',
+            'https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1400&q=85',
+        ],
     },
 ];
 
-async function getPlaceholderImageId(db) {
+async function downloadVehicleImage(url) {
+    const response = await fetch(url, { signal: AbortSignal.timeout(20000) });
+    if (!response.ok) {
+        throw new Error(`Image download failed with HTTP ${response.status}: ${url}`);
+    }
+
+    const contentType = response.headers.get('content-type')?.split(';')[0];
+    if (!contentType?.startsWith('image/') || contentType === 'image/svg+xml') {
+        throw new Error(`Expected a raster image but received ${contentType || 'an unknown content type'}: ${url}`);
+    }
+
+    return { buffer: Buffer.from(await response.arrayBuffer()), contentType };
+}
+
+async function getVehicleImageId(db, vehicle, url, index) {
+    const photoId = new URL(url).pathname.split('/').pop();
+    const filename = `test-${vehicle.categoria}-${index + 1}-${photoId}.jpg`;
     const files = db.collection('vehicleImages.files');
-    const existingFile = await files.findOne({ filename: PLACEHOLDER_FILENAME });
+    const existingFile = await files.findOne({ filename, 'metadata.sourceUrl': url });
     if (existingFile) {
-        await files.updateOne(
-            { _id: existingFile._id },
-            { $set: { 'metadata.contentType': 'image/svg+xml' } },
-        );
         return existingFile._id;
     }
 
+    const { buffer, contentType } = await downloadVehicleImage(url);
     const bucket = new mongoose.mongo.GridFSBucket(db, { bucketName: 'vehicleImages' });
     return new Promise((resolve, reject) => {
-        const uploadStream = bucket.openUploadStream(PLACEHOLDER_FILENAME, {
-            metadata: { contentType: 'image/svg+xml' },
+        const uploadStream = bucket.openUploadStream(filename, {
+            metadata: {
+                contentType,
+                sourceUrl: url,
+                license: 'Unsplash License',
+            },
         });
         uploadStream.on('error', reject);
         uploadStream.on('finish', () => resolve(uploadStream.id));
-        uploadStream.end(PLACEHOLDER_IMAGE);
+        uploadStream.end(buffer);
     });
 }
 
@@ -87,18 +108,30 @@ async function main() {
     let connection;
 
     try {
-        connection = await connectDBAdmin();
-        const imageId = await getPlaceholderImageId(connection.db);
+        connection = await connectDBUser();
 
         for (const vehicle of testVehicles) {
+            const { imageUrls, ...vehicleData } = vehicle;
+            const images = await Promise.all(
+                imageUrls.map(async (url, index) => ({
+                    id: await getVehicleImageId(connection.db, vehicle, url, index),
+                    filename: `test-${vehicle.categoria}-${index + 1}-${new URL(url).pathname.split('/').pop()}.jpg`,
+                })),
+            );
             await Vehicle.updateOne(
-                { nome: vehicle.nome, marca: vehicle.marca },
-                { $set: { ...vehicle, imagemId: imageId, imagemNome: PLACEHOLDER_FILENAME } },
+                { nome: vehicleData.nome },
+                {
+                    $set: {
+                        ...vehicleData,
+                        imagemIds: images.map(({ id }) => id),
+                        imagemNomes: images.map(({ filename }) => filename),
+                    },
+                },
                 { upsert: true },
             );
         }
 
-        console.log(`Seeded ${testVehicles.length} test vehicles across ${new Set(testVehicles.map(({ categoria }) => categoria)).size} categories.`);
+        console.log(`Seeded ${testVehicles.length} test vehicles with ${testVehicles[0].imageUrls.length} Unsplash images each.`);
     } catch (error) {
         console.error('Test vehicle seed failed:', error.message);
         process.exitCode = 1;

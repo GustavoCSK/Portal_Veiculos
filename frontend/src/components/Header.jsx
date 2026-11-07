@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
+import './Header.css'
 
 function Header({ theme, onToggleTheme }) {
     return (
@@ -15,7 +16,7 @@ function Header({ theme, onToggleTheme }) {
                 <div className="headerActions">
                     <nav className="headerNav" aria-label="Navegação principal">
                         <a href="/">Home</a>
-                        <a href="/#sobre">About us</a>
+                        <a href="/#sobre">Sobre nós</a>
                     </nav>
                     <button
                         className="themeToggle"
