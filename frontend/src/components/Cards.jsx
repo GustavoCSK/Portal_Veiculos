@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import formatCurrency from '../utils/formatCurrency'
+import { API_URL } from '../config'
 import './Products.css'
 import './VehicleCard.css'
-const API_URL = 'http://localhost:3000/api/vehicles'
 
 async function fetchVehicles(setVehicles, setCategories) {
     try {
